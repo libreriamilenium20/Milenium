@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Librería Milenium</title>
+  
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" href="https://i.postimg.cc/ZYGd9Hh8/l-OGO-TERMINADO.png">
+  
+  <!-- ENLACES A RECURSOS EXTERNOS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght=0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+  <style>
+    /* ==========================================================================
+       VARIABLES GLOBALES Y ESTILOS BASE
+       ========================================================================== */
+    :root {
+      --color-primario: #1e3c72;     
+      --color-secundario: #2a5298;   
+      --border-book-card: #e2e8f0;   
+      --bg-admin-card: #f8fafc;      
+      --border-color: #e2e8f0;       
+      --bg-body: linear-gradient(135deg, #fbfbf9 0%, #f0f4f8 100%);
+      --text-main: #2c3e50;
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --input-bg: #ffffff;
+      --text-muted: #64748b;
+      --canvas-opacity: 0.35;
+      --canvas-book-color: #4a6fa5;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+      --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05);
+      --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.08), 0 10px 10px -5px rgba(0,0,0,0.04);
+    }
+
+    [data-theme="dark"] {
+      --bg-body: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      --text-main: #f1f5f9;
+      --card-bg: rgba(30, 41, 59, 0.85);
+      --bg-admin-card: #1e293b;
+      --border-color: #334155;
+      --input-bg: #0f172a;
+      --text-muted: #94a3b8;
+      --canvas-opacity: 0.15;
+      --canvas-book-color: #6366f1;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-body);
+      color: var(--text-main);
+      line-height: 1.6;
+      position: relative;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    #background-canvas {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 0; pointer-events: none; opacity: var(--canvas-opacity);
+    }
+
+    /* ENCABEZADO */
+    header {
+      background: linear-gradient(135deg, var(--color-primario) 0%, var(--color-secundario) 100%);
+      color: white; padding: 2rem 1.2rem; position: relative; z-index: 2;
+      box-shadow: var(--shadow-md);
+    }
+
+    .header-content {
+      max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
+    }
+
+    .header-logo-container { display: flex; align-items: center; gap: 20px; }
+
+    .header-logo {
+      height: 85px; max-width: 240px; width: auto; object-fit: contain; border-radius: 10px;
+      background: rgba(255, 255, 255, 0.12); padding: 6px;
+    }
+
+    .header-title h1 {
+      font-family: 'Playfair Display', serif; margin: 0; font-size: 2.5rem; font-weight: 700;
+      letter-spacing: 0.5px; user-select: none; cursor: pointer;
+    }
+
+    .header-subtitle {
+      display: block; font-family: 'Inter', sans-serif; font-size: 0.9rem;
+      margin-top: 4px; font-weight: 400; color: #cbd5e1; text-transform: uppercase; letter-spacing: 2px;
+    }
+
+    .main-content { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; position: relative; z-index: 2; }
+
+    .section-title {
+      font-family: 'Playfair Display', serif; text-align: center; margin: 3rem 0 2rem; color: var(--color-primario); font-size: 2.2rem;
+    }
+    .section-title::after { content: ''; display: block; width: 50px; height: 3px; background: var(--color-secundario); margin: 0.8rem auto 0; }
+
+    /* CARRUSEL OPTIMIZADO */
+    .carousel-container { width: 100%; position: relative; margin: 1rem 0 3rem; padding: 0 3rem; }
+    .carousel-wrapper { overflow: hidden; width: 100%; border-radius: 16px; padding: 1rem 0; background: var(--card-bg); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); }
+    .carousel { display: flex; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
+    .carousel-item { min-width: 200px; max-width: 200px; margin: 0 1.2rem; text-align: center; flex-shrink: 0; cursor: pointer; }
+    .carousel-item img { width: 100%; height: 280px; object-fit: contain; background-color: white; border-radius: 12px; padding: 10px; box-shadow: var(--shadow-sm); transition: transform 0.3s; }
+    .carousel-item:hover img { transform: translateY(-50px); }
+    .carousel-item h4 { font-family: 'Playfair Display', serif; margin-top: 1rem; color: var(--text-main); font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .carousel-btn {
+      position: absolute; top: 50%; transform: translateY(-50%); background: var(--input-bg); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 50%; width: 46px; height: 46px; font-size: 20px; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-md); transition: background 0.2s;
+    }
+    .carousel-btn:hover { background: var(--bg-admin-card); }
+    .carousel-btn.next { left: 0; }
+    .carousel-btn.prev { right: 0; }
+
+    /* BUSCADOR Y FILTROS INTEGRADOS */
+    .search-filter-section {
+      background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 20px; margin: 2rem 0; box-shadow: var(--shadow-sm);
+    }
+    .search-container { display: flex; flex-direction: column; align-items: center; position: relative; width: 100%; }
+    .search-box { position: relative; width: 100%; max-width: 700px; z-index: 10; }
+    .search-box input { width: 100%; padding: 1rem 3.5rem 1rem 1.8rem; border-radius: 50px; border: 1px solid var(--border-color); font-size: 1rem; background: var(--input-bg); color: var(--text-main); box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
+    .search-icon { position: absolute; right: 1.8rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+
+    .advanced-controls {
+      display: flex; flex-wrap: wrap; gap: 1.5rem; width: 100%; max-width: 700px; margin-top: 1.2rem; justify-content: space-between; align-items: center;
+    }
+    .filter-group { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .filter-group select { padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-main); }
+    
+    .price-slider-container { display: flex; align-items: center; gap: 10px; flex-grow: 1; max-width: 300px; }
+    .price-slider-container input[type="range"] { flex-grow: 1; accent-color: var(--color-primario); }
+
+    .autocomplete-suggestions {
+      position: absolute; top: 100%; left: 0; right: 0; background: var(--input-bg); border-radius: 16px; margin-top: 5px; max-height: 250px; overflow-y: auto; border: 1px solid var(--border-color); display: none; z-index: 99; box-shadow: var(--shadow-lg);
+    }
+    .suggestion-item { padding: 0.8rem 1.5rem; cursor: pointer; display: flex; align-items: center; gap: 12px; color: var(--text-main); }
+    .suggestion-item:hover { background: var(--bg-admin-card); }
+    .suggestion-item img { width: 30px; height: 40px; object-fit: contain; }
+
+    /* FILTROS */
+    .categories-container { max-width: 800px; margin: 0 auto 3rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 0 1rem; }
+    .category-btn { background: var(--input-bg); border: 1px solid var(--border-color); padding: 0.5rem 1.2rem; border-radius: 30px; font-size: 0.9rem; font-weight: 500; color: var(--text-main); cursor: pointer; transition: all 0.2s; }
+    .category-btn.active { background: var(--color-primario); border-color: var(--color-primario); color: white; box-shadow: var(--shadow-sm); }
+
+    /* REJILLA DE LIBROS */
+    .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2.5rem; justify-items: center; min-height: 200px; }
+    .no-results { grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-muted); font-size: 1.1rem; }
+
+    /* EFECTO SKELETON LOADING */
+    .skeleton-card { background: var(--card-bg); border-radius: 16px; padding: 1.8rem; width: 100%; border: 2px solid var(--border-color); height: 430px; display: flex; flex-direction: column; gap: 15px; }
+    .skeleton-pulse { background: linear-gradient(-45deg, #e2e8f0 35%, #f1f5f9 50%, #e2e8f0 65%); background-size: 400% 400%; animation: pulseAnimation 1.5s infinite ease-out; border-radius: 8px; }
+    [data-theme="dark"] .skeleton-pulse { background: linear-gradient(-45deg, #1e293b 35%, #334155 50%, #1e293b 65%); background-size: 400% 400%; }
+    @keyframes pulseAnimation { 0% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+    /* TARJETA DE LIBRO PREMIUM CON EFECTO 3D MÁS SUAVE Y CONTROL DE FLUJO */
+    .book { 
+      background: var(--card-bg); backdrop-filter: blur(5px); border-radius: 16px; padding: 1.8rem; 
+      text-align: center; width: 100%; border: 2px solid var(--border-book-card); display: flex; 
+      flex-direction: column; height: 100%; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s;
+      perspective: 1000px; cursor: pointer; box-shadow: var(--shadow-sm);
+    }
+    .book:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+    
+    .book-image-container { 
+      width: 100%; height: 260px; display: flex; align-items: center; justify-content: center; 
+      background-color: #fafafa; border-radius: 12px; margin-bottom: 1.5rem; overflow: hidden; padding: 10px;
+      transition: transform 0.5s ease; transform-style: preserve-3d;
+    }
+    .book:hover .book-image-container { transform: rotateY(18deg) scale(1.02); }
+    .book img { max-width: 95%; max-height: 95%; object-fit: contain; filter: drop-shadow(2px 5px 6px rgba(0,0,0,0.15)); }
+    
+    .book h4 { font-family: 'Playfair Display', serif; margin: 0.4rem 0; font-size: 1.4rem; color: var(--color-primario); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .book-author { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .book-resume { font-size: 0.9rem; color: var(--text-main); margin-bottom: 1.5rem; flex-grow: 1; text-align: left; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; opacity: 0.85; }
+    .book-details { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; padding-top: 1rem; border-top: 1px solid var(--border-color); margin-bottom: 1rem; }
+    .book-category { background: var(--bg-admin-card); color: var(--color-secundario); padding: 0.3rem 0.9rem; border-radius: 30px; font-weight: 600; font-size: 0.75rem; }
+    .book-availability { font-weight: 600; font-size: 0.85rem; }
+    
+    .available { color: #10b981; }
+    .not-available { color: #ef4444; }
+    .discontinued { color: #f59e0b; } 
+
+    .book-footer-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+    .book-price { font-size: 1.35rem; font-weight: 700; color: var(--color-primario); }
+    
+    .btn-order-wa { 
+      background: #25d366; color: white; border: none; padding: 0.5rem 1rem; border-radius: 10px; 
+      font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px; 
+      transition: background 0.2s; text-decoration: none;
+    }
+    .btn-order-wa:hover { background: #128c7e; }
+
+    /* PAGINACIÓN INTELIGENTE */
+    .pagination-container { display: flex; justify-content: center; margin: 3rem 0; }
+    .btn-load-more { background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); font-weight: 600; padding: 0.8rem 2rem; border-radius: 30px; cursor: pointer; box-shadow: var(--shadow-sm); transition: all 0.2s; }
+    .btn-load-more:hover { background: var(--color-primario); color: white; border-color: var(--color-primario); }
+
+    /* VISTA RÁPIDA (MODAL DETALLES) */
+    #quickview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(6px); z-index: 2000; }
+    .modal-qv-body { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--input-bg); color: var(--text-main); width: 90%; max-width: 650px; border-radius: 24px; padding: 2.5rem; display: flex; gap: 2rem; border: 1px solid var(--border-color); box-shadow: var(--shadow-lg); }
+    .modal-qv-img { flex: 1; max-width: 220px; height: 320px; background: #fafafa; border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 10px; }
+    .modal-qv-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    .modal-qv-info { flex: 1.2; display: flex; flex-direction: column; }
+    .modal-qv-close { align-self: flex-end; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); background: none; border: none; }
+    .modal-qv-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--color-primario); margin: 0.5rem 0; }
+    .modal-qv-resume { font-size: 0.95rem; margin: 1rem 0; color: var(--text-main); max-height: 120px; overflow-y: auto; }
+
+    /* INFO DE LA WEB */
+    .info-sections { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; margin: 5rem 0 2rem; }
+    .info-card { background: var(--card-bg); padding: 2.5rem; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); }
+    .info-card h3 { font-family: 'Playfair Display', serif; color: var(--color-primario); font-size: 1.8rem; margin-bottom: 1rem; }
+
+    /* FOOTER */
+    footer { background: #111827; color: #e5e7eb; padding: 4rem 1.2rem 2rem; margin-top: 5rem; position: relative; z-index: 2; border-top: 1px solid #1f2937; }
+    .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 3rem; border-bottom: 1px solid #374151; padding-bottom: 3rem; }
+    .footer-brand h2 { font-family: 'Playfair Display', serif; color: white; margin-bottom: 1rem; }
+    .social-links { display: flex; gap: 1rem; margin-top: 1rem; }
+    .social-icon { width: 44px; height: 44px; background: #1f2937; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; transition: background 0.2s; }
+    .social-icon:hover { background: var(--color-primario); }
+    .qr-box img { width: 140px; height: 140px; background: white; padding: 8px; border-radius: 12px; }
+    .footer-bottom { text-align: center; padding-top: 2rem; font-size: 0.85rem; color: #9ca3af; }
+
+    .theme-toggle-btn {
+      position: fixed; bottom: 2.5rem; left: 2.5rem; background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 50%; width: 55px; height: 55px; font-size: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; box-shadow: var(--shadow-md);
+    }
+
+    /* TOAST NOTIFICATIONS */
+    #toast-container { position: fixed; bottom: 2.5rem; right: 2.5rem; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+    .toast { background: #1e293b; color: white; padding: 1rem 1.5rem; border-radius: 12px; font-weight: 500; font-size: 0.9rem; box-shadow: var(--shadow-lg); animation: slideIn 0.3s ease-out forwards; display: flex; align-items: center; gap: 10px; border-left: 4px solid var(--color-secundario); }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+    /* PANEL DE ADMINISTRACIÓN TOTALMENTE POTENCIADO */
+    #admin-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(8px); z-index: 999; }
+    #admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--input-bg); color: var(--text-main); padding: 2.5rem; border-radius: 24px; z-index: 1000; width: 94%; max-width: 950px; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border-color); box-shadow: var(--shadow-lg); }
+    
+    .panel-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 1.2rem; margin-bottom: 1.5rem; }
+    .panel-header h3 { font-family: 'Playfair Display', serif; color: var(--color-primario); font-size: 2rem; }
+    
+    .panel-header-actions { display: flex; gap: 10px; align-items: center; }
+    .logout-panel-btn { background: #fee2e2; border: 1px solid #fca5a5; font-size: 0.9rem; color: #b91c1c; cursor: pointer; padding: 0.4rem 0.9rem; border-radius: 30px; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+    .close-panel-btn { background: var(--bg-admin-card); border: 1px solid var(--border-color); font-size: 1.2rem; color: var(--text-muted); cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+    /* ESTADÍSTICAS REAL-TIME EN ADMIN */
+    .admin-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .stat-box { background: var(--bg-admin-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center; }
+    .stat-number { font-size: 1.6rem; font-weight: 700; color: var(--color-primario); }
+    .stat-label { font-size: 0.75rem; color: var(--text-muted); uppercase; font-weight: 600; margin-top: 2px; }
+
+    .admin-tabs { display: flex; gap: 8px; background: var(--bg-admin-card); padding: 6px; border-radius: 12px; margin-bottom: 2rem; border: 1px solid var(--border-color); }
+    .admin-tab { flex: 1; padding: 0.8rem 1rem; cursor: pointer; border: none; background: none; font-weight: 600; color: var(--text-muted); border-radius: 8px; text-align: center; }
+    .admin-tab.active { background: var(--input-bg); color: var(--color-primario); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); }
+
+    .admin-card { background: var(--bg-admin-card); border: 1px solid var(--border-color); padding: 2rem; border-radius: 16px; margin-bottom: 2rem; }
+    .admin-card-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 1.2rem; display: flex; align-items: center; justify-content: space-between; width: 100%; }
+
+    .admin-form label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.4rem; text-transform: uppercase; }
+    .admin-form input, .admin-form select, .admin-form textarea { width: 100%; padding: 0.75rem 1rem; margin-bottom: 1.2rem; border: 1px solid var(--border-color); border-radius: 10px; background: var(--input-bg); color: var(--text-main); }
+
+    /* PREVISUALIZACIÓN DE IMAGEN EN FORMULARIO */
+    .form-img-preview-container { display: flex; gap: 1.5rem; align-items: flex-start; }
+    .form-inputs-side { flex: 2; }
+    .live-preview-box { flex: 0.8; height: 210px; border: 2px dashed var(--border-color); border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: var(--input-bg); padding: 10px; }
+    .live-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+    .form-row { display: flex; gap: 1.2rem; }
+    .form-row > div { flex: 1; }
+
+    .admin-action-btn-row { display: flex; gap: 10px; }
+    button.btn-primary { background: var(--color-primario); color: white; border: none; padding: 0.9rem 1.5rem; border-radius: 10px; font-weight: 600; font-size: 1rem; cursor: pointer; flex: 2; }
+    button.btn-secondary { background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 0.9rem 1.5rem; border-radius: 10px; font-weight: 600; cursor: pointer; flex: 1; }
+
+    .table-container { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 12px; }
+    .management-table { width: 100%; border-collapse: collapse; background: var(--input-bg); color: var(--text-main); }
+    .management-table th, .management-table td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border-color); }
+    .management-table th { background: var(--bg-admin-card); color: var(--text-muted); }
+
+    .action-btns button { border: none; padding: 0.5rem 0.8rem; border-radius: 8px; cursor: pointer; font-weight: 600; }
+    .edit-btn { background: #e0f2fe; color: #0369a1; margin-right: 0.4rem; }
+    .delete-btn { background: #fee2e2; color: #b91c1c; }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    @media (max-width: 768px) {
+      .header-content { flex-direction: column; text-align: center; gap: 1rem; }
+      .info-sections, .footer-content { grid-template-columns: 1fr; }
+      .form-row, .form-img-preview-container, .modal-qv-body { flex-direction: column; }
+      .admin-stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .modal-qv-body { width: 95%; max-height: 90vh; overflow-y: auto; padding: 1.5rem; }
+      .modal-qv-img { max-width: 100%; height: 200px; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="background-canvas"></canvas>
+  <div id="toast-container"></div>
+  
+  <header>
+    <div class="header-content">
+      <div class="header-logo-container">
+        <img id="main-logo" class="header-logo" src="https://i.postimg.cc/ZYGd9Hh8/l-OGO-TERMINADO.png" alt="Logo">
+        <div class="header-title">
+          <h1 ondblclick="solicitarAccesoAdmin()">Librería Milenium</h1>
+          <span class="header-subtitle">Santiago Tianguistenco</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="main-content">
+    <!-- CARRUSEL -->
+    <section class="carousel-container">
+      <h3 class="section-title">Libros Nuevos</h3>
+      <button class="carousel-btn next" onclick="moveCarousel(-1)">&#10094;</button>
+      <button class="carousel-btn prev" onclick="moveCarousel(1)">&#10095;</button>
+      <div class="carousel-wrapper" onmouseenter="pausarCarrusel()" onmouseleave="reanudarCarrusel()">
+        <div class="carousel" id="new-books-carousel"></div>
+      </div>
+    </section>
+
+    <!-- FILTROS AVANZADOS -->
+    <section class="search-filter-section">
+      <div class="search-container">
+        <div class="search-box">
+          <input type="text" id="search-input" placeholder="Buscar por título, autor o categoría..." autocomplete="off">
+          <span class="search-icon">🔍</span>
+          <div id="autocomplete-list" class="autocomplete-suggestions"></div>
+        </div>
+        
+        <div class="advanced-controls">
+          <div class="filter-group">
+            <label><i class="fa-solid fa-sort"></i> Ordenar:</label>
+            <select id="control-ordenar" onchange="renderizarCatalogo()">
+              <option value="default">Por Defecto</option>
+              <option value="price-asc">Precio: Menor a Mayor</option>
+              <option value="price-desc">Precio: Mayor a Menor</option>
+              <option value="alpha">Alfabético (A-Z)</option>
+            </select>
+          </div>
+
+          <div class="price-slider-container">
+            <span>$0</span>
+            <input type="range" id="control-precio-rango" min="0" max="2000" value="2000" oninput="actualizarTextoPrecio(this.value)">
+            <span id="texto-precio-max">$2000</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="categories-container" id="categories-filter-box"></div>
+    
+    <!-- CONTENEDOR PRINCIPAL DE LIBROS -->
+    <section class="container" id="book-list"></section>
+    
+    <div class="pagination-container" id="pagination-box"></div>
+
+    <section class="info-sections">
+      <div class="info-card">
+        <h3><i class="fa-solid fa-book-open"></i> Acerca de Nosotros</h3>
+        <p>Bienvenidos a <strong>Librería Milenium</strong> en Santiago Tianguistenco. Somos un espacio dedicado a conectar las mentes curiosas con las mejores historias, textos académicos y obras literarias.</p>
+      </div>
+      <div class="info-card">
+        <h3><i class="fa-solid fa-handshake"></i> Cómo Trabajamos</h3>
+        <p>Hacer tuyo tu próximo libro favorito es sumamente sencillo en nuestro portal:</p>
+        <ul>
+          <li>Explora nuestro inventario actualizado en tiempo real.</li>
+          <li>Revisa la disponibilidad de cada título.</li>
+          <li>Visítanos en nuestra sucursal o contáctanos por WhatsApp para apartar tu ejemplar.</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <!-- MODAL VISTA RÁPIDA -->
+  <div id="quickview-modal" onclick="cerrarVistaRapida(event)">
+    <div class="modal-qv-body">
+      <div class="modal-qv-img">
+        <img id="qv-img" src="" alt="">
+      </div>
+      <div class="modal-qv-info">
+        <button class="modal-qv-close" onclick="cerrarVistaRapida(event, true)">&times;</button>
+        <span id="qv-cat" class="book-category" style="width:fit-content"></span>
+        <h2 id="qv-title" class="modal-qv-title"></h2>
+        <p id="qv-author" class="book-author"></p>
+        <p id="qv-resume" class="modal-qv-resume"></p>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:auto;">
+          <span id="qv-price" class="book-price"></span>
+          <a id="qv-btn-wa" href="" target="_blank" class="btn-order-wa"><i class="fa-brands fa-whatsapp"></i> Apartar Ahora</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h2>Librería Milenium</h2>
+        <p>Tu rincón literario favorito en Santiago Tianguistenco.</p>
+        <div class="social-links">
+          <a href="#" id="link-fb" class="social-icon" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" id="link-ig" class="social-icon" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" id="link-wa" class="social-icon" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Horarios</h4>
+        <p>Lunes a Sábado<br>9:00 AM - 7:30 PM</p>
+      </div>
+      <div class="qr-box">
+        <h4>Escanea la Web</h4>
+        <img id="main-qr" src="" alt="Código QR">
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 Librería Milenium. Todos los derechos reservados.</div>
+  </footer>
+
+  <button class="theme-toggle-btn" onclick="conmutarModoOscuro()">🌓</button>
+
+  <!-- PANEL DE ADMINISTRACIÓN -->
+  <div id="admin-overlay" onclick="cerrarAdminPanel()"></div>
+  <div id="admin-panel">
+    <div class="panel-header">
+      <h3>Panel de Control Integral</h3>
+      <div class="panel-header-actions">
+        <button class="logout-panel-btn" onclick="cerrarSesionAdmin()"><i class="fa-solid fa-lock"></i> Cerrar Sesión</button>
+        <button class="close-panel-btn" onclick="cerrarAdminPanel()">&times;</button>
+      </div>
+    </div>
+
+    <!-- BLOQUE REAL-TIME ESTADÍSTICAS -->
+    <div class="admin-stats-grid">
+      <div class="stat-box"><div class="stat-number" id="stat-total">0</div><div class="stat-label">Total Libros</div></div>
+      <div class="stat-box"><div class="stat-number" id="stat-disp">0</div><div class="stat-label">Disponibles</div></div>
+      <div class="stat-box"><div class="stat-number" id="stat-agot">0</div><div class="stat-label">Agotados</div></div>
+      <div class="stat-box"><div class="stat-number" id="stat-desc">0</div><div class="stat-label">Descontinuados</div></div>
+    </div>
+
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="cambiarPestañaAdmin('tab-libros', this)"><i class="fa-solid fa-box"></i> Gestión de Libros</button>
+      <button class="admin-tab" onclick="cambiarPestañaAdmin('tab-diseno', this)"><i class="fa-solid fa-palette"></i> Personalización y Ajustes</button>
+    </div>
+    
+    <div id="tab-libros" class="tab-content active">
+      <div class="admin-card">
+        <div class="admin-card-title">
+          <span id="panel-title"><i class="fa-solid fa-plus-circle"></i> Agregar Nuevo Libro</span>
+        </div>
+        
+        <form class="admin-form" id="book-form" onsubmit="guardarLibro(event)">
+          <input type="hidden" id="edit-idFirebase" value="">
+          
+          <div class="form-img-preview-container">
+            <div class="form-inputs-side">
+              <label>Título del Libro</label>
+              <input type="text" id="form-titulo" required>
+              <label>Autor</label>
+              <input type="text" id="form-autor" required>
+              <label>URL de la Imagen Portada</label>
+              <input type="url" id="form-imagen" oninput="actualizarLivePreview(this.value)" required>
+            </div>
+            <div class="live-preview-box">
+              <img id="form-live-img" src="https://via.placeholder.com/140x200?text=Sin+Portada" alt="Vista Previa">
+            </div>
+          </div>
+
+          <label>Resumen / Descripción Corta</label>
+          <textarea id="form-resumen" rows="2"></textarea>
+          
+          <div class="form-row">
+            <div>
+              <label>Precio ($)</label>
+              <input type="number" id="form-precio" required>
+            </div>
+            <div>
+              <label>Categoría</label>
+              <input type="text" id="form-categoria" required>
+            </div>
+            <div>
+              <label>Disponibilidad</label>
+              <select id="form-disponible">
+                <option value="true">Disponible</option>
+                <option value="false">Agotado</option>
+                <option value="discontinued">Descontinuado hasta nuevo aviso</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="admin-action-btn-row">
+            <button type="submit" class="btn-primary" id="submit-form-btn">Guardar Libro en Catálogo</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="management-section">
+        <h4><i class="fa-solid fa-list-check"></i> Inventario de Libros Actuales</h4>
+        <div class="table-container">
+          <table class="management-table">
+            <thead>
+              <tr><th>Título</th><th>Autor</th><th>Precio</th><th>Acciones</th></tr>
+            </thead>
+            <tbody id="management-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-diseno" class="tab-content">
+      <div class="admin-card">
+        <div class="admin-card-title">
+          <span><i class="fa-solid fa-sliders"></i> Ajustes de Identidad Visual</span>
+          <button class="btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.8rem" onclick="respaldarInventario(event)"><i class="fa-solid fa-download"></i> Respaldar Base Datos</button>
+        </div>
+        <form class="admin-form" onsubmit="guardarAjustes(event)">
+          <label>URL del Logotipo</label>
+          <input type="url" id="input-url-logo">
+          <label>URL Código QR (Vacío para automático)</label>
+          <input type="url" id="input-url-qr">
+          <div class="form-row">
+            <div>
+              <label>Color Principal</label>
+              <input type="color" id="input-color-primario" value="#1e3c72">
+            </div>
+            <div>
+              <label>Color Secundario</label>
+              <input type="color" id="input-color-secundario" value="#2a5298">
+            </div>
+            <div>
+              <label>Recuadro de Tarjetas</label>
+              <input type="color" id="input-color-recuadro" value="#e2e8f0">
+            </div>
+          </div>
+          <label>WhatsApp</label>
+          <input type="url" id="input-social-wa">
+          <label>Facebook</label>
+          <input type="url" id="input-social-fb">
+          <label>Instagram</label>
+          <input type="url" id="input-social-ig">
+          <button type="submit" class="btn-primary">Aplicar Cambios del Sitio</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ADMIN_PASSWORD = "mileniumadmin"; 
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDkxZO_rT-_3yy1JdekkQmiStQNkqzwGYI",
+      authDomain: "libreria-milenium.firebaseapp.com",
+      databaseURL: "https://libreria-milenium-default-rtdb.firebaseio.com",
+      projectId: "libreria-milenium",
+      storageBucket: "libreria-milenium.firebasestorage.app",
+      messagingSenderId: "691981895582",
+      appId: "1:691981895582:web:b3af21222d14f7e8af788f",
+      measurementId: "G-0BW3PRC67M"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let misLibros = [];
+    let configuracionSitio = {};
+    let categoriaSeleccionada = "Todas";
+    let adminAutenticado = false;
+
+    // Control de paginación
+    let limiteLibrosPorPagina = 8;
+    let paginaActual = 1;
+
+    let carouselIndex = 0;
+    let autoPlayInterval = null;
+
+    function lanzarToast(mensaje) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `<i class="fa-solid fa-circle-info"></i> <span>${mensaje}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => { toast.remove(); }, 3500);
+    }
+
+    function conectarBaseDeDatos() {
+      db.ref('configuracion').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) configuracionSitio = data;
+        aplicarConfiguracionVisual();
+        cargarValoresAjustesEnForm();
+      });
+
+      db.ref('libros').on('value', (snapshot) => {
+        const data = snapshot.val();
+        misLibros = [];
+        if (data) {
+          Object.keys(data).forEach(key => {
+            misLibros.push({ idFirebase: key, ...data[key] });
+          });
+        }
+        calcularEstadisticasAdmin();
+        renderizarCategorias();
+        renderizarCatalogo();
+        renderizarTablaAdmin();
+        iniciarAutoPlayCarrusel();
+      });
+    }
+
+    function inicializarWeb() {
+      // Detección automática de preferencia del SO para Modo Oscuro
+      const temaGuardado = localStorage.getItem("milenium-theme");
+      if (temaGuardado) {
+        document.documentElement.setAttribute("data-theme", temaGuardado);
+      } else {
+        const prefiereOscuro = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.setAttribute("data-theme", prefiereOscuro ? "dark" : "light");
+      }
+
+      // Pintar skeletons iniciales antes de los datos reales de Firebase
+      const listContenedor = document.getElementById('book-list');
+      let htmlSkeletons = "";
+      for(let i=0; i<4; i++) {
+        htmlSkeletons += `
+          <div class="skeleton-card">
+            <div class="skeleton-pulse" style="height:240px; width:100%"></div>
+            <div class="skeleton-pulse" style="height:25px; width:80%"></div>
+            <div class="skeleton-pulse" style="height:15px; width:50%"></div>
+          </div>`;
+      }
+      listContenedor.innerHTML = htmlSkeletons;
+
+      conectarBaseDeDatos();
+      iniciarLibrosFlotantes();
+      configurarBuscadorInteligente();
+    }
+
+    function conmutarModoOscuro() {
+      const temaActual = document.documentElement.getAttribute("data-theme");
+      const nuevoTema = temaActual === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", nuevoTema);
+      localStorage.setItem("milenium-theme", nuevoTema);
+      lanzarToast(`Modo ${nuevoTema === 'dark' ? 'oscuro' : 'claro'} activado`);
+    }
+
+    function aplicarConfiguracionVisual() {
+      document.documentElement.style.setProperty('--color-primario', configuracionSitio.color1 || '#1e3c72');
+      document.documentElement.style.setProperty('--color-secundario', configuracionSitio.color2 || '#2a5298');
+      document.documentElement.style.setProperty('--border-book-card', configuracionSitio.colorRecuadro || '#e2e8f0');
+      document.getElementById('main-logo').src = configuracionSitio.logo || 'https://i.postimg.cc/ZYGd9Hh8/l-OGO-TERMINADO.png';
+      const urlActual = window.location.href;
+      document.getElementById('main-qr').src = configuracionSitio.qr ? configuracionSitio.qr : `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(urlActual)}`;
+      document.getElementById('link-wa').href = configuracionSitio.whatsapp || '#';
+      document.getElementById('link-fb').href = configuracionSitio.facebook || '#';
+      document.getElementById('link-ig').href = configuracionSitio.instagram || '#';
+    }
+
+    function cargarValoresAjustesEnForm() {
+      if(!configuracionSitio.color1) return;
+      document.getElementById('input-url-logo').value = configuracionSitio.logo || "";
+      document.getElementById('input-url-qr').value = configuracionSitio.qr || "";
+      document.getElementById('input-color-primario').value = configuracionSitio.color1;
+      document.getElementById('input-color-secundario').value = configuracionSitio.color2;
+      document.getElementById('input-color-recuadro').value = configuracionSitio.colorRecuadro || "#e2e8f0";
+      document.getElementById('input-social-wa').value = configuracionSitio.whatsapp || "";
+      document.getElementById('input-social-fb').value = configuracionSitio.facebook || "";
+      document.getElementById('input-social-ig').value = configuracionSitio.instagram || "";
+    }
+
+    function actualizarLivePreview(url) {
+      const img = document.getElementById('form-live-img');
+      img.src = url ? url : "https://via.placeholder.com/140x200?text=Sin+Portada";
+    }
+
+    function calcularEstadisticasAdmin() {
+      let total = misLibros.length;
+      let disponibles = 0; let agotados = 0; let descontinuados = 0;
+
+      misLibros.forEach(l => {
+        if(l.available === "discontinued") descontinuados++;
+        else if(l.available === false || l.available === "false") agotados++;
+        else disponibles++;
+      });
+
+      document.getElementById('stat-total').innerText = total;
+      document.getElementById('stat-disp').innerText = disponibles;
+      document.getElementById('stat-agot').innerText = agotados;
+      document.getElementById('stat-desc').innerText = descontinuados;
+    }
+
+    function actualizarTextoPrecio(val) {
+      document.getElementById('texto-precio-max').innerText = `$${val}`;
+      renderizarCatalogo();
+    }
+
+    function guardarAjustes(event) {
+      event.preventDefault();
+      if(!adminAutenticado) return;
+      const nuevosAjustes = {
+        logo: document.getElementById('input-url-logo').value,
+        qr: document.getElementById('input-url-qr').value,
+        color1: document.getElementById('input-color-primario').value,
+        color2: document.getElementById('input-color-secundario').value,
+        colorRecuadro: document.getElementById('input-color-recuadro').value,
+        whatsapp: document.getElementById('input-social-wa').value,
+        facebook: document.getElementById('input-social-fb').value,
+        instagram: document.getElementById('input-social-ig').value
+      };
+      db.ref('configuracion').set(nuevosAjustes).then(() => {
+        cerrarAdminPanel();
+        lanzarToast("Ajustes visuales aplicados correctamente");
+      });
+    }
+
+    function cambiarPestañaAdmin(tabId, boton) {
+      document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+      document.querySelectorAll('.admin-tab').forEach(at => at.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      boton.classList.add('active');
+    }
+
+    function solicitarAccesoAdmin() {
+      if (adminAutenticado) { abrirAdminPanel(); return; }
+      const passIngresada = prompt("Introduce la contraseña de administrador:");
+      if (passIngresada === ADMIN_PASSWORD) {
+        adminAutenticado = true;
+        lanzarToast("Autenticación exitosa como Administrador");
+        abrirAdminPanel();
+      } else if (passIngresada !== null) {
+        lanzarToast("Acceso Denegado: Contraseña errónea");
+      }
+    }
+
+    function cerrarSesionAdmin() {
+      adminAutenticado = false;
+      cerrarAdminPanel();
+      lanzarToast("Sesión de administrador finalizada");
+    }
+
+    function respaldarInventario(e) {
+      e.preventDefault();
+      if(!adminAutenticado) return;
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(misLibros, null, 2));
+      const downloadAnchorElement = document.createElement('a');
+      downloadAnchorElement.setAttribute("href", dataStr);
+      downloadAnchorElement.setAttribute("download", "respaldo_inventario_milenium.json");
+      document.body.appendChild(downloadAnchorElement);
+      downloadAnchorElement.click();
+      downloadAnchorElement.remove();
+      lanzarToast("Archivo de respaldo JSON generado con éxito");
+    }
+
+    function renderizarCategorias() {
+      const contenedorFiltros = document.getElementById('categories-filter-box');
+      const categoriasUnicas = new Set();
+      misLibros.forEach(l => { if(l.categoria) categoriasUnicas.add(l.categoria.trim()); });
+      let htmlBotones = `<button class="category-btn ${categoriaSeleccionada === 'Todas' ? 'active' : ''}" onclick="filtrarPorCategoria('Todas')">Todas</button>`;
+      categoriasUnicas.forEach(cat => {
+        htmlBotones += `<button class="category-btn ${categoriaSeleccionada === cat ? 'active' : ''}" onclick="filtrarPorCategoria('${cat}')">${cat}</button>`;
+      });
+      contenedorFiltros.innerHTML = htmlBotones;
+    }
+
+    function filtrarPorCategoria(categoria) {
+      categoriaSeleccionada = categoria;
+      paginaActual = 1; 
+      renderizarCategorias();
+      renderizarCatalogo();
+    }
+
+    function configurarBuscadorInteligente() {
+      const inputBuscar = document.getElementById('search-input');
+      const listaSugerencias = document.getElementById('autocomplete-list');
+
+      inputBuscar.addEventListener('input', function() {
+        const texto = this.value.toLowerCase().trim();
+        listaSugerencias.innerHTML = "";
+        if (texto === "") { listaSugerencias.style.display = "none"; renderizarCatalogo(); return; }
+
+        const coincidencias = misLibros.filter(l => l.titulo.toLowerCase().includes(texto) || l.autor.toLowerCase().includes(texto));
+        if (coincidencias.length > 0) {
+          coincidencias.slice(0, 5).forEach(libro => {
+            const item = document.createElement('div');
+            item.className = "suggestion-item";
+            item.innerHTML = `<img src="${libro.imagen}"><div><strong>${libro.titulo}</strong></div>`;
+            item.addEventListener('click', () => {
+              inputBuscar.value = libro.titulo;
+              listaSugerencias.style.display = "none";
+              paginaActual = 1;
+              renderizarCatalogo(libro.titulo); 
+            });
+            listaSugerencias.appendChild(item);
+          });
+          listaSugerencias.style.display = "block";
+        }
+        paginaActual = 1;
+        renderizarCatalogo(texto);
+      });
+
+      document.addEventListener('click', (e) => {
+        if(e.target !== inputBuscar) listaSugerencias.style.display = "none";
+      });
+    }
+
+    function abrirVistaRapida(idFirebase) {
+      const libro = misLibros.find(l => l.idFirebase === idFirebase);
+      if(!libro) return;
+      document.getElementById('qv-img').src = libro.imagen;
+      document.getElementById('qv-title').innerText = libro.titulo;
+      document.getElementById('qv-author').innerText = `de ${libro.autor}`;
+      document.getElementById('qv-cat').innerText = libro.categoria;
+      document.getElementById('qv-resume').innerText = libro.resumen || "Sin descripción disponible.";
+      document.getElementById('qv-price').innerText = `$${libro.precio}`;
+      
+      const numeroWa = configuracionSitio.whatsapp ? configuracionSitio.whatsapp.replace(/\D/g, "") : "521234567890";
+      const textoMsj = encodeURIComponent(`Hola, me interesa apartar el libro "${libro.titulo}" del autor ${libro.autor} que vi en la web de Librería Milenium.`);
+      document.getElementById('qv-btn-wa').href = `https://wa.me/${numeroWa}?text=${textoMsj}`;
+      
+      document.getElementById('quickview-modal').style.display = "block";
+    }
+
+    function cerrarVistaRapida(e, forzar = false) {
+      if(e.target === document.getElementById('quickview-modal') || forzar) {
+        document.getElementById('quickview-modal').style.display = "none";
+      }
+    }
+
+    function renderizarCatalogo(textoFiltro = "") {
+      const listaContenedor = document.getElementById('book-list');
+      const carruselContenedor = document.getElementById('new-books-carousel');
+      const paginacionBox = document.getElementById('pagination-box');
+      listaContenedor.innerHTML = ""; carruselContenedor.innerHTML = "";
+
+      // Render de Carrusel Superior (Últimos 6 libros añadidos)
+      misLibros.slice(-6).reverse().forEach(libro => {
+        carruselContenedor.innerHTML += `<div class="carousel-item" onclick="abrirVistaRapida('${libro.idFirebase}')"><img src="${libro.imagen}"><h4>${libro.titulo}</h4></div>`;
+      });
+
+      // Filtro por Buscador y Categoría
+      let librosFiltrados = misLibros.filter(libro => {
+        const cumpleCategoria = (categoriaSeleccionada === "Todas" || libro.categoria === categoriaSeleccionada);
+        const texto = textoFiltro ? textoFiltro.toLowerCase() : document.getElementById('search-input').value.toLowerCase().trim();
+        const cumpleTexto = (texto === "" || libro.titulo.toLowerCase().includes(texto) || libro.autor.toLowerCase().includes(texto) || libro.categoria.toLowerCase().includes(texto));
+        
+        // Filtro adicional por rango de precio
+        const precioMaximo = parseFloat(document.getElementById('control-precio-rango').value);
+        const cumplePrecio = libro.precio <= precioMaximo;
+
+        return cumpleCategoria && cumpleTexto && cumplePrecio;
+      });
+
+      // Ordenación Avanzada
+      const orden = document.getElementById('control-ordenar').value;
+      if (orden === "price-asc") librosFiltrados.sort((a,b) => a.precio - b.precio);
+      if (orden === "price-desc") librosFiltrados.sort((a,b) => b.precio - a.precio);
+      if (orden === "alpha") librosFiltrados.sort((a,b) => a.titulo.localeCompare(b.titulo));
+
+      if(librosFiltrados.length === 0) {
+        listaContenedor.innerHTML = `<div class="no-results"><i class="fa-solid fa-face-frown" style="font-size:2rem; margin-bottom:10px; display:block"></i> No encontramos títulos con esas especificaciones.</div>`;
+        paginacionBox.innerHTML = "";
+        return;
+      }
+
+      // Paginación Inteligente ("Cargar Más")
+      let indiceMaximo = paginaActual * limiteLibrosPorPagina;
+      let fragmentoMostrar = librosFiltrados.slice(0, indiceMaximo);
+
+      fragmentoMostrar.forEach(libro => {
+        let textoDisp = "Disponible"; let claseDisp = "available";
+        if (libro.available === false || libro.available === "false") { textoDisp = "Agotado"; claseDisp = "not-available"; } 
+        else if (libro.available === "discontinued") { textoDisp = "Descontinuado hasta nuevo aviso"; claseDisp = "discontinued"; }
+
+        const numeroWa = configuracionSitio.whatsapp ? configuracionSitio.whatsapp.replace(/\D/g, "") : "521234567890";
+        const textoMsj = encodeURIComponent(`Hola, me interesa apartar el libro "${libro.titulo}" que vi en la web de Librería Milenium.`);
+
+        listaContenedor.innerHTML += `
+          <div class="book" onclick="abrirVistaRapida('${libro.idFirebase}')">
+            <div class="book-image-container"><img src="${libro.imagen}" loading="lazy"></div>
+            <h4>${libro.titulo}</h4>
+            <p class="book-author">de ${libro.autor}</p>
+            <p class="book-resume">${libro.resumen || 'Sin descripción.'}</p>
+            <div class="book-details">
+              <span class="book-category">${libro.categoria}</span>
+              <span class="book-availability ${claseDisp}">${textoDisp}</span>
+            </div>
+            <div class="book-footer-row" onclick="event.stopPropagation()">
+              <div class="book-price">$${libro.precio}</div>
+              <a href="https://wa.me/${numeroWa}?text=${textoMsj}" target="_blank" class="btn-order-wa"><i class="fa-brands fa-whatsapp"></i> Apartar</a>
+            </div>
+          </div>`;
+      });
+
+      // Condición botón cargar más
+      if (librosFiltrados.length > indiceMaximo) {
+        paginacionBox.innerHTML = `<button class="btn-load-more" onclick="cargarMasLibros()">Ver más títulos</button>`;
+      } else {
+        paginacionBox.innerHTML = "";
+      }
+    }
+
+    function cargarMasLibros() {
+      paginaActual++;
+      renderizarCatalogo();
+    }
+
+    function renderizarTablaAdmin() {
+      const tbody = document.getElementById('management-table-body');
+      tbody.innerHTML = "";
+      misLibros.forEach((libro, index) => {
+        tbody.innerHTML += `
+          <tr>
+            <td><strong>${libro.titulo}</strong></td><td>${libro.autor}</td><td>$${libro.precio}</td>
+            <td class="action-btns">
+              <button class="edit-btn" onclick="cargarLibroEnFormulario(${index})">Editar</button>
+              <button class="delete-btn" onclick="eliminarLibro('${libro.idFirebase}', '${libro.titulo}')">Borrar</button>
+            </td>
+          </tr>`;
+      });
+    }
+
+    function abrirAdminPanel() { 
+      document.getElementById('admin-overlay').style.display = 'block'; 
+      document.getElementById('admin-panel').style.display = 'block'; 
+    }
+    
+    function cerrarAdminPanel() { 
+      document.getElementById('admin-overlay').style.display = 'none'; 
+      document.getElementById('admin-panel').style.display = 'none'; 
+      document.getElementById('book-form').reset(); 
+      document.getElementById('edit-idFirebase').value = ""; 
+      document.getElementById('form-live-img').src = "https://via.placeholder.com/140x200?text=Sin+Portada";
+      document.getElementById('panel-title').innerHTML = `<i class="fa-solid fa-plus-circle"></i> Agregar Nuevo Libro`;
+    }
+
+    function guardarLibro(event) {
+      event.preventDefault();
+      if(!adminAutenticado) return;
+      const idFirebase = document.getElementById('edit-idFirebase').value;
+      
+      const valorDisp = document.getElementById('form-disponible').value;
+      let valorGuardarDisp = valorDisp;
+      if (valorDisp === "true") valorGuardarDisp = true;
+      if (valorDisp === "false") valorGuardarDisp = false;
+
+      const nuevoLibro = {
+        titulo: document.getElementById('form-titulo').value,
+        autor: document.getElementById('form-autor').value,
+        imagen: document.getElementById('form-imagen').value,
+        resumen: document.getElementById('form-resumen').value,
+        precio: parseFloat(document.getElementById('form-precio').value),
+        categoria: document.getElementById('form-categoria').value,
+        available: valorGuardarDisp
+      };
+
+      if (idFirebase === "") {
+        db.ref('libros').push(nuevoLibro).then(() => {
+          cerrarAdminPanel();
+          lanzarToast("Nuevo libro incorporado al catálogo");
+        });
+      } else {
+        db.ref('libros/' + idFirebase).set(nuevoLibro).then(() => {
+          cerrarAdminPanel();
+          lanzarToast("Registro de libro modificado exitosamente");
+        });
+      }
+    }
+
+    function cargarLibroEnFormulario(index) {
+      const libro = misLibros[index];
+      document.getElementById('edit-idFirebase').value = libro.idFirebase;
+      document.getElementById('form-titulo').value = libro.titulo;
+      document.getElementById('form-autor').value = libro.autor;
+      document.getElementById('form-imagen').value = libro.imagen;
+      document.getElementById('form-live-img').src = libro.imagen;
+      document.getElementById('form-resumen').value = libro.resumen;
+      document.getElementById('form-precio').value = libro.precio;
+      document.getElementById('form-categoria').value = libro.categoria;
+      
+      document.getElementById('panel-title').innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Editando: ${libro.titulo}`;
+
+      if (libro.available === true || libro.available === "true") {
+        document.getElementById('form-disponible').value = "true";
+      } else if (libro.available === false || libro.available === "false") {
+        document.getElementById('form-disponible').value = "false";
+      } else {
+        document.getElementById('form-disponible').value = libro.available; 
+      }
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    function eliminarLibro(idFirebase, titulo) {
+      if(!adminAutenticado) return;
+      if(confirm(`¿Eliminar permanentemente "${titulo}"?`)) {
+        db.ref('libros/' + idFirebase).remove().then(() => {
+          lanzarToast(`"${titulo}" fue removido de la base de datos`);
+        });
+      }
+    }
+
+    function actualizarDesplazamientoCarrusel() {
+      const carousel = document.getElementById('new-books-carousel');
+      const items = document.querySelectorAll('.carousel-item');
+      if (items.length === 0) return;
+
+      const itemWidth = items[0].offsetWidth + parseInt(window.getComputedStyle(items[0]).marginLeft) + parseInt(window.getComputedStyle(items[0]).marginRight);
+      const contenedorWrapper = document.querySelector('.carousel-wrapper');
+      const itemsVisibles = Math.floor(contenedorWrapper.offsetWidth / itemWidth) || 1;
+      const maxIndex = items.length - itemsVisibles;
+
+      if (carouselIndex > maxIndex) { carouselIndex = 0; } 
+      else if (carouselIndex < 0) { carouselIndex = maxIndex >= 0 ? maxIndex : 0; }
+
+      carousel.style.transform = `translateX(${-carouselIndex * itemWidth}px)`;
+    }
+
+    function moveCarousel(direction) {
+      carouselIndex += direction;
+      actualizarDesplazamientoCarrusel();
+    }
+
+    function iniciarAutoPlayCarrusel() {
+      pausarCarrusel(); 
+      autoPlayInterval = setInterval(() => {
+        carouselIndex++;
+        actualizarDesplazamientoCarrusel();
+      }, 3500); 
+    }
+
+    function pausarCarrusel() { if (autoPlayInterval) clearInterval(autoPlayInterval); }
+    function reanudarCarrusel() { iniciarAutoPlayCarrusel(); }
+
+    window.addEventListener('resize', () => { actualizarDesplazamientoCarrusel(); });
+
+    function iniciarLibrosFlotantes() {
+      const canvas = document.getElementById('background-canvas');
+      const ctx = canvas.getContext('2d');
+      function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+      window.addEventListener('resize', resize); resize();
+
+      const libros = [];
+      for (let i = 0; i < 10; i++) {
+        libros.push({ x: Math.random() * canvas.width, y: canvas.height + Math.random() * 200, w: 30, h: 20, speed: Math.random() * 0.4 + 0.2, angle: 0 });
+      }
+
+      function drawRealisticBook(ctx, w, h) {
+        ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--color-secundario') || '#4a6fa5'; 
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(w, h); ctx.stroke();
+      }
+
+      function anim() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        libros.forEach(l => {
+          l.y -= l.speed;
+          ctx.save(); ctx.translate(l.x, l.y); drawRealisticBook(ctx, l.w, l.h); ctx.restore();
+          if (l.y < -50) { l.y = canvas.height + 50; l.x = Math.random() * canvas.width; }
+        });
+        requestAnimationFrame(anim);
+      }
+      anim();
+    }
+
+    document.addEventListener('DOMContentLoaded', inicializarWeb);
+  </script>
+</body>
+</html>
