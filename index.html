@@ -3,34 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Librería Milenium</title>
+  <title>Librería Milenium - Catálogo Oficial</title>
   
   <!-- FAVICON -->
   <link rel="icon" type="image/png" href="https://i.postimg.cc/ZYGd9Hh8/l-OGO-TERMINADO.png">
   
-  <!-- ENLACES A RECURSOS EXTERNOS -->
+  <!-- RECURSOS EXTERNOS: FONT AWESOME & GOOGLE FONTS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght=0,600;0,700;1,400&display=swap" rel="stylesheet">
 
-  <!-- Firebase -->
+  <!-- FIREBASE COMPAT SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
   <style>
     /* ==========================================================================
-       VARIABLES GLOBALES Y ESTILOS BASE
+       VARIABLES GLOBALES Y TEMAS
        ========================================================================== */
     :root {
       --color-primario: #1e3c72;     
       --color-secundario: #2a5298;   
+      --color-acento: #f59e0b;
       --border-book-card: #e2e8f0;   
       --bg-admin-card: #f8fafc;      
       --border-color: #e2e8f0;       
       --bg-body: linear-gradient(135deg, #fbfbf9 0%, #f0f4f8 100%);
       --text-main: #2c3e50;
-      --card-bg: rgba(255, 255, 255, 0.9);
+      --card-bg: rgba(255, 255, 255, 0.92);
       --input-bg: #ffffff;
       --text-muted: #64748b;
       --canvas-opacity: 0.35;
@@ -42,7 +43,7 @@
     [data-theme="dark"] {
       --bg-body: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
       --text-main: #f1f5f9;
-      --card-bg: rgba(30, 41, 59, 0.85);
+      --card-bg: rgba(30, 41, 59, 0.88);
       --bg-admin-card: #1e293b;
       --border-color: #334155;
       --input-bg: #0f172a;
@@ -69,39 +70,59 @@
       z-index: 0; pointer-events: none; opacity: var(--canvas-opacity);
     }
 
-    /* ENCABEZADO */
+    /* BARRA SUPERIOR */
+    .top-benefits-bar {
+      background: rgba(15, 23, 42, 0.95);
+      color: #e2e8f0;
+      font-size: 0.82rem;
+      padding: 0.5rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      position: relative;
+      z-index: 3;
+    }
+    .top-benefits-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .benefit-item { display: flex; align-items: center; gap: 6px; font-weight: 500; }
+    .benefit-item i { color: var(--color-acento); }
+
+    /* ENCABEZADO Y LOGOTIPOS */
     header {
       background: linear-gradient(135deg, var(--color-primario) 0%, var(--color-secundario) 100%);
-      color: white; padding: 2rem 1.2rem; position: relative; z-index: 2;
+      color: white; padding: 1.5rem 1.2rem; position: relative; z-index: 2;
       box-shadow: var(--shadow-md);
+      transition: background 0.3s ease;
     }
-
-    .header-content {
-      max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
-    }
-
-    .header-logo-container { display: flex; align-items: center; gap: 20px; }
-
-    .header-logo {
-      height: 85px; max-width: 240px; width: auto; object-fit: contain; border-radius: 10px;
-      background: rgba(255, 255, 255, 0.12); padding: 6px;
-    }
-
-    .header-title h1 {
-      font-family: 'Playfair Display', serif; margin: 0; font-size: 2.5rem; font-weight: 700;
-      letter-spacing: 0.5px; user-select: none; cursor: pointer;
-    }
-
-    .header-subtitle {
-      display: block; font-family: 'Inter', sans-serif; font-size: 0.9rem;
-      margin-top: 4px; font-weight: 400; color: #cbd5e1; text-transform: uppercase; letter-spacing: 2px;
-    }
+    .header-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; gap: 15px; }
+    .header-logo-container { display: flex; align-items: center; gap: 15px; }
+    .header-logo { height: 80px; max-width: 200px; width: auto; object-fit: contain; border-radius: 10px; background: rgba(255, 255, 255, 0.12); padding: 6px; transition: transform 0.3s; }
+    .header-logo:hover { transform: scale(1.03); }
+    .header-title { text-align: center; }
+    .header-title h1 { font-family: 'Playfair Display', serif; margin: 0; font-size: 2.3rem; font-weight: 700; letter-spacing: 0.5px; user-select: none; cursor: pointer; }
+    .header-subtitle { display: block; font-family: 'Inter', sans-serif; font-size: 0.85rem; margin-top: 4px; font-weight: 400; color: #cbd5e1; text-transform: uppercase; letter-spacing: 2px; }
 
     .main-content { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; position: relative; z-index: 2; }
 
-    .section-title {
-      font-family: 'Playfair Display', serif; text-align: center; margin: 3rem 0 2rem; color: var(--color-primario); font-size: 2.2rem;
+    /* HERO BANNER */
+    .hero-banner {
+      background: linear-gradient(rgba(30, 60, 114, 0.88), rgba(42, 82, 152, 0.88)), url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+      border-radius: 20px; color: white; padding: 3.5rem 2rem; text-align: center; margin-bottom: 2.5rem; box-shadow: var(--shadow-lg); border: 1px solid rgba(255,255,255,0.15);
     }
+    .hero-banner h2 { font-family: 'Playfair Display', serif; font-size: 2.6rem; margin-bottom: 0.8rem; }
+    .hero-banner p { font-size: 1.1rem; max-width: 700px; margin: 0 auto 1.8rem; opacity: 0.95; }
+    .hero-actions { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+    .btn-hero-primary { background: var(--color-acento); color: #0f172a; padding: 0.8rem 1.8rem; border-radius: 30px; font-weight: 700; text-decoration: none; transition: all 0.2s; }
+    .btn-hero-primary:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4); }
+    .btn-hero-secondary { background: rgba(255,255,255,0.2); color: white; padding: 0.8rem 1.8rem; border-radius: 30px; font-weight: 600; text-decoration: none; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.3); transition: background 0.2s; }
+    .btn-hero-secondary:hover { background: rgba(255,255,255,0.3); }
+
+    .section-title { font-family: 'Playfair Display', serif; text-align: center; margin: 2.5rem 0 1.8rem; color: var(--color-primario); font-size: 2.2rem; }
     .section-title::after { content: ''; display: block; width: 50px; height: 3px; background: var(--color-secundario); margin: 0.8rem auto 0; }
 
     /* CARRUSEL DE LIBROS */
@@ -109,148 +130,93 @@
     .carousel-wrapper { overflow: hidden; width: 100%; border-radius: 16px; padding: 1rem 0; background: var(--card-bg); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); }
     .carousel { display: flex; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
     .carousel-item { min-width: 200px; max-width: 200px; margin: 0 1.2rem; text-align: center; flex-shrink: 0; cursor: pointer; }
-    
-    /* PORTADA EN CARRUSEL */
-    .carousel-item-img-box {
-      width: 100%; height: 260px; display: flex; align-items: center; justify-content: center;
-      background: transparent; border-radius: 12px; overflow: hidden; padding: 6px;
-      transition: transform 0.3s;
-    }
-    .carousel-item-img-box img { 
-      max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.12));
-    }
+    .carousel-item-img-box { width: 100%; height: 260px; display: flex; align-items: center; justify-content: center; background: transparent; border-radius: 12px; overflow: hidden; padding: 6px; transition: transform 0.3s; }
+    .carousel-item-img-box img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.12)); }
     .carousel-item:hover .carousel-item-img-box { transform: translateY(-8px); }
     .carousel-item h4 { font-family: 'Playfair Display', serif; margin-top: 0.8rem; color: var(--text-main); font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    .carousel-btn {
-      position: absolute; top: 50%; transform: translateY(-50%); background: var(--input-bg); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 50%; width: 46px; height: 46px; font-size: 20px; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-md); transition: background 0.2s;
-    }
+    .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: var(--input-bg); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 50%; width: 46px; height: 46px; font-size: 20px; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-md); transition: background 0.2s; }
     .carousel-btn:hover { background: var(--bg-admin-card); }
     .carousel-btn.next { left: 0; }
     .carousel-btn.prev { right: 0; }
 
-    /* BUSCADOR Y FILTROS */
-    .search-filter-section {
-      background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 20px; margin: 2rem 0; box-shadow: var(--shadow-sm);
-    }
+    /* CONTROLES DE BÚSQUEDA Y FILTROS */
+    .search-filter-section { background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 20px; margin: 2rem 0; box-shadow: var(--shadow-sm); }
     .search-container { display: flex; flex-direction: column; align-items: center; position: relative; width: 100%; }
     .search-box { position: relative; width: 100%; max-width: 700px; z-index: 10; }
     .search-box input { width: 100%; padding: 1rem 3.5rem 1rem 1.8rem; border-radius: 50px; border: 1px solid var(--border-color); font-size: 1rem; background: var(--input-bg); color: var(--text-main); box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
     .search-icon { position: absolute; right: 1.8rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 
-    .advanced-controls {
-      display: flex; flex-wrap: wrap; gap: 1.5rem; width: 100%; max-width: 700px; margin-top: 1.2rem; justify-content: space-between; align-items: center;
-    }
+    .advanced-controls { display: flex; flex-wrap: wrap; gap: 1.5rem; width: 100%; max-width: 700px; margin-top: 1.2rem; justify-content: space-between; align-items: center; }
     .filter-group { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
     .filter-group select { padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-main); }
-    
     .price-slider-container { display: flex; align-items: center; gap: 10px; flex-grow: 1; max-width: 300px; }
     .price-slider-container input[type="range"] { flex-grow: 1; accent-color: var(--color-primario); }
 
-    .autocomplete-suggestions {
-      position: absolute; top: 100%; left: 0; right: 0; background: var(--input-bg); border-radius: 16px; margin-top: 5px; max-height: 250px; overflow-y: auto; border: 1px solid var(--border-color); display: none; z-index: 99; box-shadow: var(--shadow-lg);
-    }
-    .suggestion-item { padding: 0.8rem 1.5rem; cursor: pointer; display: flex; align-items: center; gap: 12px; color: var(--text-main); }
-    .suggestion-item:hover { background: var(--bg-admin-card); }
-    .suggestion-item img { width: 30px; height: 42px; object-fit: contain; border-radius: 4px; background: transparent; }
-
-    /* MENÚ DESPLEGABLE DE CATEGORÍAS */
-    .dropdown-categories-wrapper { max-width: 700px; margin: 0 auto 2.5rem; position: relative; z-index: 15; }
-    .dropdown-cat-btn {
-      width: 100%; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main);
-      padding: 0.9rem 1.5rem; border-radius: 14px; font-weight: 600; display: flex; justify-content: space-between;
-      align-items: center; cursor: pointer; transition: all 0.2s ease; box-shadow: var(--shadow-sm);
-    }
+    /* BARRA DE CATEGORÍAS Y NOVEDADES */
+    .cat-novedades-bar { max-width: 700px; margin: 0 auto 2.5rem; display: flex; gap: 12px; align-items: center; position: relative; z-index: 15; }
+    .dropdown-categories-wrapper { flex: 1; position: relative; }
+    .dropdown-cat-btn { width: 100%; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 0.9rem 1.2rem; border-radius: 14px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.2s ease; box-shadow: var(--shadow-sm); }
     .dropdown-cat-btn:hover { border-color: var(--color-primario); }
-    .dropdown-cat-content {
-      display: none; position: absolute; top: 108%; left: 0; right: 0; background: var(--input-bg);
-      border: 1px solid var(--border-color); border-radius: 16px; padding: 1.2rem;
-      box-shadow: var(--shadow-lg); max-height: 280px; overflow-y: auto; z-index: 100;
-    }
+    .dropdown-cat-content { display: none; position: absolute; top: 108%; left: 0; right: 0; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.2rem; box-shadow: var(--shadow-lg); max-height: 280px; overflow-y: auto; z-index: 100; }
     .dropdown-cat-content.show { display: block; animation: fadeIn 0.2s ease; }
     @keyframes fadeIn { from { opacity:0; transform: translateY(-5px); } to { opacity:1; transform: translateY(0); } }
-
     .categories-pills-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-    .category-btn {
-      background: var(--bg-admin-card); border: 1px solid var(--border-color); padding: 0.45rem 1rem;
-      border-radius: 20px; font-size: 0.85rem; font-weight: 500; color: var(--text-main); cursor: pointer; transition: all 0.2s;
-      display: flex; align-items: center; gap: 6px;
-    }
+    .category-btn { background: var(--bg-admin-card); border: 1px solid var(--border-color); padding: 0.45rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 500; color: var(--text-main); cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
     .category-btn.active { background: var(--color-primario); border-color: var(--color-primario); color: white; }
     .cat-count-badge { background: rgba(0,0,0,0.1); padding: 2px 6px; border-radius: 10px; font-size: 0.75rem; }
 
-    /* BANNER PEDIDOS ESPECIALES WHATSAPP */
-    .special-order-banner {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;
-      border-radius: 16px; padding: 1.5rem 2rem; margin: 0 0 2.5rem; display: flex;
-      justify-content: space-between; align-items: center; box-shadow: var(--shadow-md); flex-wrap: wrap; gap: 1rem;
-    }
+    .btn-novedades-pill { background: linear-gradient(135deg, #ef4444 0%, #f59e0b 100%); color: white; border: none; padding: 0.9rem 1.4rem; border-radius: 14px; font-weight: 700; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow-sm); transition: transform 0.2s, box-shadow 0.2s; white-space: nowrap; }
+    .btn-novedades-pill:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35); }
+    .btn-novedades-pill.active { outline: 3px solid var(--color-acento); }
+
+    /* BANNER PEDIDOS ESPECIALES */
+    .special-order-banner { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border-radius: 16px; padding: 1.5rem 2rem; margin: 0 0 2.5rem; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-md); flex-wrap: wrap; gap: 1rem; }
     .special-order-info h4 { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 0.2rem; }
     .special-order-info p { font-size: 0.9rem; opacity: 0.9; }
-    .btn-special-wa {
-      background: white; color: #059669; border: none; padding: 0.75rem 1.4rem; border-radius: 30px;
-      font-weight: 700; font-size: 0.9rem; text-decoration: none; display: flex; align-items: center; gap: 8px;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
+    .btn-special-wa { background: white; color: #059669; border: none; padding: 0.75rem 1.4rem; border-radius: 30px; font-weight: 700; font-size: 0.9rem; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: transform 0.2s, box-shadow 0.2s; }
     .btn-special-wa:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
 
     /* REJILLA DE LIBROS */
     .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2.5rem; justify-items: center; min-height: 200px; }
     .no-results { grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-muted); font-size: 1.1rem; }
 
-    /* SKELETON LOADING */
-    .skeleton-card { background: var(--card-bg); border-radius: 16px; padding: 1.8rem; width: 100%; border: 2px solid var(--border-color); height: 480px; display: flex; flex-direction: column; gap: 15px; }
-    .skeleton-pulse { background: linear-gradient(-45deg, #e2e8f0 35%, #f1f5f9 50%, #e2e8f0 65%); background-size: 400% 400%; animation: pulseAnimation 1.5s infinite ease-out; border-radius: 8px; }
-    [data-theme="dark"] .skeleton-pulse { background: linear-gradient(-45deg, #1e293b 35%, #334155 50%, #1e293b 65%); background-size: 400% 400%; }
-    @keyframes pulseAnimation { 0% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-
     /* TARJETA DE LIBRO */
-    .book { 
-      background: var(--card-bg); backdrop-filter: blur(5px); border-radius: 16px; padding: 1.5rem; 
-      text-align: center; width: 100%; border: 2px solid var(--border-book-card); display: flex; 
-      flex-direction: column; height: 100%; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s;
-      cursor: pointer; box-shadow: var(--shadow-sm);
-    }
-    .book:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
-    
-    .book-image-container { 
-      width: 100%; height: 280px; display: flex; align-items: center; justify-content: center; 
-      background: transparent; border-radius: 12px; margin-bottom: 1.2rem; padding: 10px;
-      overflow: hidden;
-    }
-    .book img { 
-      max-width: 100%; max-height: 100%; object-fit: contain;
-      filter: drop-shadow(0 6px 10px rgba(0,0,0,0.15)); transition: transform 0.4s ease;
-    }
-    .book:hover img { transform: scale(1.05); }
-    
+    .book { background: var(--card-bg); backdrop-filter: blur(5px); border-radius: 16px; padding: 1.5rem; text-align: center; width: 100%; border: 1px solid var(--border-book-card); display: flex; flex-direction: column; height: 100%; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s, border-color 0.3s; cursor: pointer; box-shadow: var(--shadow-sm); position: relative; }
+    .book:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); border-color: var(--color-secundario); }
+    .book-image-container { width: 100%; height: 280px; display: flex; align-items: center; justify-content: center; background: transparent; border-radius: 12px; margin-bottom: 1.2rem; padding: 10px; overflow: hidden; }
+    .book img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 6px 10px rgba(0,0,0,0.15)); transition: transform 0.4s ease; }
+    .book:hover img { transform: scale(1.06); }
     .book h4 { font-family: 'Playfair Display', serif; margin: 0.2rem 0; font-size: 1.25rem; color: var(--color-primario); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .book-author { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .book-author { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.5rem; font-weight: 500; }
     .book-resume { font-size: 0.88rem; color: var(--text-main); margin-bottom: 1rem; flex-grow: 1; text-align: left; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; opacity: 0.85; }
-    
     .book-details { display: flex; flex-direction: column; gap: 8px; padding-top: 0.8rem; border-top: 1px solid var(--border-color); margin-bottom: 1rem; }
     .categories-tag-group { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
     .book-category { background: var(--bg-admin-card); color: var(--color-secundario); padding: 0.2rem 0.7rem; border-radius: 20px; font-weight: 600; font-size: 0.72rem; border: 1px solid var(--border-color); }
     .book-availability { font-weight: 600; font-size: 0.8rem; }
-    
-    .available { color: #10b981; }
-    .not-available { color: #ef4444; }
-    .discontinued { color: #f59e0b; } 
-
+    .available { color: #10b981; } .not-available { color: #ef4444; }
     .book-footer-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
     .book-price { font-size: 1.3rem; font-weight: 700; color: var(--color-primario); }
-    
-    .btn-order-wa { 
-      background: #25d366; color: white; border: none; padding: 0.5rem 0.9rem; border-radius: 10px; 
-      font-weight: 600; font-size: 0.82rem; cursor: pointer; display: flex; align-items: center; gap: 6px; 
-      transition: background 0.2s; text-decoration: none;
-    }
-    .btn-order-wa:hover { background: #128c7e; }
+    .btn-order-wa { background: #25d366; color: white; border: none; padding: 0.55rem 1rem; border-radius: 10px; font-weight: 600; font-size: 0.82rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.2s, transform 0.2s; text-decoration: none; }
+    .btn-order-wa:hover { background: #128c7e; transform: scale(1.03); }
 
-    /* PAGINACIÓN */
-    .pagination-container { display: flex; justify-content: center; margin: 3rem 0; }
-    .btn-load-more { background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); font-weight: 600; padding: 0.8rem 2rem; border-radius: 30px; cursor: pointer; box-shadow: var(--shadow-sm); transition: all 0.2s; }
-    .btn-load-more:hover { background: var(--color-primario); color: white; border-color: var(--color-primario); }
+    /* SECCIÓN DE RESEÑAS */
+    .testimonials-section { margin: 4rem 0 2rem; background: var(--card-bg); border-radius: 20px; padding: 2.5rem 2rem; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); }
+    .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+    .testimonial-card { background: var(--bg-admin-card); padding: 1.5rem; border-radius: 14px; border: 1px solid var(--border-color); }
+    .stars { color: #f59e0b; margin-bottom: 0.5rem; }
+    .testimonial-card p { font-size: 0.9rem; font-style: italic; margin-bottom: 0.8rem; }
+    .testimonial-author { font-size: 0.82rem; font-weight: 700; color: var(--color-primario); text-align: right; }
+
+    .comments-form-card { background: var(--bg-admin-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; margin-top: 2rem; }
+    
+    .local-store-banner { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: white; border-radius: 20px; padding: 2rem; margin: 3rem 0; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+    .local-store-content h3 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #f8fafc; margin-bottom: 0.4rem; }
+    .local-store-content p { color: #94a3b8; font-size: 0.95rem; }
+    .map-container { width: 100%; border-radius: 12px; overflow: hidden; margin-top: 1rem; border: 1px solid rgba(255,255,255,0.1); }
+    .map-container iframe { width: 100%; height: 220px; border: 0; }
+    .btn-visit-store { background: var(--color-secundario); color: white; text-decoration: none; padding: 0.8rem 1.6rem; border-radius: 30px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: background 0.2s; }
+    .btn-visit-store:hover { background: var(--color-primario); }
 
     /* MODAL VISTA RÁPIDA */
     #quickview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(6px); z-index: 2000; }
@@ -262,111 +228,79 @@
     .modal-qv-title { font-family: 'Playfair Display', serif; font-size: 1.7rem; color: var(--color-primario); margin: 0.5rem 0; }
     .modal-qv-resume { font-size: 0.92rem; margin: 1rem 0; color: var(--text-main); max-height: 120px; overflow-y: auto; }
 
-    /* INFO DE LA WEB */
-    .info-sections { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; margin: 4rem 0 2rem; }
+    .info-sections { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; margin: 2rem 0; }
     .info-card { background: var(--card-bg); padding: 2.2rem; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); }
     .info-card h3 { font-family: 'Playfair Display', serif; color: var(--color-primario); font-size: 1.7rem; margin-bottom: 1rem; }
 
-    /* FOOTER DINÁMICO */
+    /* FOOTER */
     footer { background: #111827; color: #e5e7eb; padding: 4rem 1.2rem 2rem; margin-top: 5rem; position: relative; z-index: 2; border-top: 1px solid #1f2937; }
-    .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1.2fr 1fr 1fr; gap: 2.5rem; border-bottom: 1px solid #374151; padding-bottom: 3rem; }
+    .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1.2fr 1fr; gap: 2.5rem; border-bottom: 1px solid #374151; padding-bottom: 3rem; }
     .footer-brand h2 { font-family: 'Playfair Display', serif; color: white; margin-bottom: 0.8rem; }
-    .social-links { display: flex; gap: 0.8rem; margin-top: 1rem; }
+    .footer-brand p { font-size: 0.9rem; color: #9ca3af; }
+    .social-links { display: flex; gap: 0.8rem; margin-top: 1.2rem; }
     .social-icon { width: 40px; height: 40px; background: #1f2937; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; transition: background 0.2s; }
     .social-icon:hover { background: var(--color-primario); }
-    
-    .footer-map-container iframe { width: 100%; height: 130px; border-radius: 12px; border: 0; margin-top: 8px; }
+    .footer-links h4 { font-family: 'Playfair Display', serif; color: white; margin-bottom: 1rem; }
+    .footer-links ul { list-style: none; }
+    .footer-links li { margin-bottom: 0.6rem; }
+    .footer-links a { color: #9ca3af; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-links a:hover { color: white; }
     .qr-box img { width: 130px; height: 130px; background: white; padding: 8px; border-radius: 12px; }
     .footer-bottom { text-align: center; padding-top: 2rem; font-size: 0.85rem; color: #9ca3af; }
 
-    .theme-toggle-btn {
-      position: fixed; bottom: 2.5rem; left: 2.5rem; background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 50%; width: 55px; height: 55px; font-size: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; box-shadow: var(--shadow-md);
-    }
+    .theme-toggle-btn { position: fixed; bottom: 2.5rem; left: 2.5rem; background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 50%; width: 55px; height: 55px; font-size: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; box-shadow: var(--shadow-md); }
 
-    /* TOAST NOTIFICATIONS */
+    /* TOASTS */
     #toast-container { position: fixed; bottom: 2.5rem; right: 2.5rem; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
     .toast { background: #1e293b; color: white; padding: 1rem 1.5rem; border-radius: 12px; font-weight: 500; font-size: 0.9rem; box-shadow: var(--shadow-lg); animation: slideIn 0.3s ease-out forwards; display: flex; align-items: center; gap: 10px; border-left: 4px solid var(--color-secundario); }
     @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-    /* PANEL DE ADMINISTRACIÓN COMPACTO */
-    #admin-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(8px); z-index: 999; }
-    #admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--input-bg); color: var(--text-main); padding: 2rem; border-radius: 24px; z-index: 1000; width: 94%; max-width: 1000px; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border-color); box-shadow: var(--shadow-lg); }
-    
-    .panel-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.2rem; }
-    .panel-header h3 { font-family: 'Playfair Display', serif; color: var(--color-primario); font-size: 1.8rem; }
-    
-    .panel-header-actions { display: flex; gap: 10px; align-items: center; }
-    .logout-panel-btn { background: #fee2e2; border: 1px solid #fca5a5; font-size: 0.85rem; color: #b91c1c; cursor: pointer; padding: 0.4rem 0.9rem; border-radius: 30px; font-weight: 600; display: flex; align-items: center; gap: 5px; }
-    .close-panel-btn { background: var(--bg-admin-card); border: 1px solid var(--border-color); font-size: 1.2rem; color: var(--text-muted); cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    /* PANEL ADMINISTRATIVO */
+    #admin-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); z-index: 999; }
+    #admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--input-bg); color: var(--text-main); padding: 2rem; border-radius: 24px; z-index: 1000; width: 94%; max-width: 1100px; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border-color); box-shadow: var(--shadow-lg); }
+    .panel-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem; }
+    .panel-header h3 { font-family: 'Playfair Display', serif; color: var(--color-primario); font-size: 1.8rem; display: flex; align-items: center; gap: 10px; }
+    .close-panel-btn { background: var(--bg-admin-card); border: 1px solid var(--border-color); font-size: 1.2rem; color: var(--text-muted); cursor: pointer; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 
-    .admin-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
-    .stat-box { background: var(--bg-admin-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 0.8rem; text-align: center; }
-    .stat-number { font-size: 1.4rem; font-weight: 700; color: var(--color-primario); }
-    .stat-label { font-size: 0.72rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
-
-    .admin-tabs { display: flex; gap: 8px; background: var(--bg-admin-card); padding: 6px; border-radius: 12px; margin-bottom: 1.5rem; border: 1px solid var(--border-color); }
-    .admin-tab { flex: 1; padding: 0.7rem 1rem; cursor: pointer; border: none; background: none; font-weight: 600; color: var(--text-muted); border-radius: 8px; text-align: center; font-size: 0.9rem; }
-    .admin-tab.active { background: var(--input-bg); color: var(--color-primario); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); }
+    .admin-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .stat-card { background: var(--bg-admin-card); border: 1px solid var(--border-color); padding: 1.2rem; border-radius: 14px; text-align: center; }
+    .stat-card-title { font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem; }
+    .stat-card-value { font-size: 1.6rem; font-weight: 700; color: var(--color-primario); }
 
     .admin-card { background: var(--bg-admin-card); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 16px; margin-bottom: 1.5rem; }
-    .admin-card-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; width: 100%; }
-
     .admin-form label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.3rem; text-transform: uppercase; }
     .admin-form input, .admin-form select, .admin-form textarea { width: 100%; padding: 0.65rem 0.9rem; margin-bottom: 1rem; border: 1px solid var(--border-color); border-radius: 10px; background: var(--input-bg); color: var(--text-main); font-size: 0.9rem; }
-
-    .btn-ai-autofill {
-      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; border: none;
-      padding: 0.65rem 1.1rem; border-radius: 10px; font-weight: 600; font-size: 0.85rem; cursor: pointer;
-      display: flex; align-items: center; gap: 8px; margin-bottom: 1rem; transition: opacity 0.2s;
-    }
-    .btn-ai-autofill:hover { opacity: 0.9; }
-
-    .form-img-preview-container { display: flex; gap: 1.5rem; align-items: flex-start; }
-    .form-inputs-side { flex: 2; }
-    .live-preview-box { flex: 0.8; height: 210px; border: 2px dashed var(--border-color); border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: var(--input-bg); padding: 6px; }
-    .live-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
-
+    .color-picker-input { height: 42px; padding: 2px; cursor: pointer; }
     .form-row { display: flex; gap: 1rem; }
     .form-row > div { flex: 1; }
-
-    .admin-action-btn-row { display: flex; gap: 10px; }
+    
+    .btn-group-admin { display: flex; gap: 10px; }
     button.btn-primary { background: var(--color-primario); color: white; border: none; padding: 0.85rem 1.5rem; border-radius: 10px; font-weight: 600; font-size: 0.95rem; cursor: pointer; flex: 2; }
-    button.btn-secondary { background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 0.85rem 1.5rem; border-radius: 10px; font-weight: 600; cursor: pointer; flex: 1; }
+    button.btn-secondary { background: var(--text-muted); color: white; border: none; padding: 0.85rem 1.5rem; border-radius: 10px; font-weight: 600; font-size: 0.95rem; cursor: pointer; flex: 1; }
 
-    /* TABLA ULTRA-COMPACTA DE GESTIÓN CON BUSCADOR INTERNO */
-    .admin-table-controls { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 0.8rem; }
-    .admin-table-search { position: relative; flex-grow: 1; max-width: 350px; }
-    .admin-table-search input { width: 100%; padding: 0.5rem 1rem 0.5rem 2.2rem; border-radius: 20px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-main); font-size: 0.85rem; }
-    .admin-table-search i { position: absolute; left: 0.8rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.8rem; }
+    .admin-table-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; gap: 1rem; flex-wrap: wrap; }
+    .admin-search-input { padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-main); width: 100%; max-width: 300px; font-size: 0.85rem; }
 
     .table-container { max-height: 380px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 12px; }
     .management-table { width: 100%; border-collapse: collapse; background: var(--input-bg); color: var(--text-main); font-size: 0.83rem; }
-    .management-table th { position: sticky; top: 0; background: var(--bg-admin-card); color: var(--text-muted); font-weight: 700; padding: 0.6rem 0.8rem; border-bottom: 2px solid var(--border-color); z-index: 5; text-align: left; }
-    .management-table td { padding: 0.45rem 0.8rem; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
-    
-    .tbl-thumb { width: 32px; height: 45px; object-fit: contain; background: transparent; border-radius: 4px; padding: 2px; }
-    .tbl-badge { padding: 2px 8px; border-radius: 12px; font-size: 0.72rem; font-weight: 600; }
-    .tbl-badge.disp { background: #d1fae5; color: #047857; }
-    .tbl-badge.agot { background: #fee2e2; color: #b91c1c; }
-
-    .action-btns button { border: none; padding: 0.3rem 0.6rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.75rem; }
-    .toggle-disp-btn { background: #e0e7ff; color: #3730a3; margin-right: 0.2rem; }
-    .edit-btn { background: #e0f2fe; color: #0369a1; margin-right: 0.2rem; }
+    .management-table th { position: sticky; top: 0; background: var(--bg-admin-card); color: var(--text-muted); font-weight: 700; padding: 0.7rem 0.8rem; border-bottom: 2px solid var(--border-color); text-align: left; }
+    .management-table td { padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+    .tbl-thumb { width: 34px; height: 48px; object-fit: contain; border-radius: 4px; }
+    .action-btns button { border: none; padding: 0.35rem 0.7rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.78rem; transition: opacity 0.2s; }
+    .action-btns button:hover { opacity: 0.8; }
+    .edit-btn { background: #e0f2fe; color: #0369a1; margin-right: 0.3rem; }
     .delete-btn { background: #fee2e2; color: #b91c1c; }
 
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-
-    @media (max-width: 900px) {
-      .footer-content { grid-template-columns: 1fr 1fr; }
-    }
     @media (max-width: 768px) {
+      .top-benefits-container { flex-direction: column; gap: 4px; text-align: center; }
       .header-content { flex-direction: column; text-align: center; gap: 1rem; }
+      .cat-novedades-bar { flex-direction: column; }
+      .hero-banner h2 { font-size: 1.8rem; }
       .info-sections, .footer-content { grid-template-columns: 1fr; }
-      .form-row, .form-img-preview-container, .modal-qv-body { flex-direction: column; }
-      .admin-stats-grid { grid-template-columns: repeat(2, 1fr); }
-      .modal-qv-body { width: 95%; max-height: 90vh; overflow-y: auto; padding: 1.5rem; }
+      .local-store-banner { flex-direction: column; text-align: center; }
+      .modal-qv-body { width: 95%; max-height: 90vh; overflow-y: auto; padding: 1.5rem; flex-direction: column; }
       .modal-qv-img { max-width: 100%; height: 200px; }
+      .form-row { flex-direction: column; }
     }
   </style>
 </head>
@@ -374,23 +308,50 @@
 
   <canvas id="background-canvas"></canvas>
   <div id="toast-container"></div>
+
+  <!-- BARRA DE BENEFICIOS -->
+  <div class="top-benefits-bar">
+    <div class="top-benefits-container">
+      <div class="benefit-item"><i class="fa-solid fa-store"></i> Retiro directo en Sucursal Plaza San José, Local 20</div>
+      <div class="benefit-item"><i class="fa-brands fa-whatsapp"></i> Atención y apartados personalizados</div>
+      <div class="benefit-item" id="top-bar-horarios"><i class="fa-regular fa-clock"></i> Lunes a Sábado de 11:00 am - 19:30 pm</div>
+    </div>
+  </div>
   
   <header>
     <div class="header-content">
+      <!-- LOGO IZQUIERDO REAL -->
       <div class="header-logo-container">
-        <img id="main-logo" class="header-logo" src="https://i.postimg.cc/ZYGd9Hh8/l-OGO-TERMINADO.png" alt="Logo">
-        <div class="header-title">
-          <h1 ondblclick="solicitarAccesoAdmin()">Librería Milenium</h1>
-          <span class="header-subtitle" id="sub-header-ubicacion">Santiago Tianguistenco</span>
-        </div>
+        <img id="main-logo-left" class="header-logo" src="https://i.postimg.cc/ZYGd9Hh8/l-OGO-TERMINADO.png" alt="Librería Milenium Logo">
+      </div>
+
+      <!-- TÍTULO DE LA LIBRERÍA (Doble clic abre Admin) -->
+      <div class="header-title">
+        <h1 ondblclick="solicitarAccesoAdmin()">Librería Milenium</h1>
+        <span class="header-subtitle" id="sub-header-ubicacion">Santiago Tianguistenco, Edo. de México</span>
+      </div>
+
+      <!-- LOGO DERECHO REAL -->
+      <div class="header-logo-container">
+        <img id="main-logo-right" class="header-logo" src="https://i.postimg.cc/ZYGd9Hh8/l-OGO-TERMINADO.png" alt="Librería Milenium Logo">
       </div>
     </div>
   </header>
 
   <div class="main-content">
-    <!-- CARRUSEL DE LIBROS NUEVOS -->
+    <!-- HERO BANNER -->
+    <section class="hero-banner">
+      <h2>Encuentra Tu Próxima Gran Lectura</h2>
+      <p>Explora nuestro catálogo en vivo, consulta disponibilidad y apártalo directamente para recogerlo en nuestra sucursal de Plaza San José.</p>
+      <div class="hero-actions">
+        <a href="#search-section" class="btn-hero-primary"><i class="fa-solid fa-magnifying-glass"></i> Explorar Catálogo</a>
+        <a href="https://wa.me/5217220000000" id="hero-btn-wa" target="_blank" class="btn-hero-secondary"><i class="fa-brands fa-whatsapp"></i> Contactar Librero</a>
+      </div>
+    </section>
+
+    <!-- CARRUSEL DE NOVEDADES -->
     <section class="carousel-container">
-      <h3 class="section-title">Libros Nuevos</h3>
+      <h3 class="section-title">Novedades en Tendencia</h3>
       <button class="carousel-btn next" onclick="moveCarousel(-1)">&#10094;</button>
       <button class="carousel-btn prev" onclick="moveCarousel(1)">&#10095;</button>
       <div class="carousel-wrapper" onmouseenter="pausarCarrusel()" onmouseleave="reanudarCarrusel()">
@@ -398,13 +359,12 @@
       </div>
     </section>
 
-    <!-- BUSCADOR Y FILTROS INTEGRADOS -->
-    <section class="search-filter-section">
+    <!-- BUSCADOR Y FILTROS -->
+    <section class="search-filter-section" id="search-section">
       <div class="search-container">
         <div class="search-box">
-          <input type="text" id="search-input" placeholder="Buscar por título, autor o categoría..." autocomplete="off">
+          <input type="text" id="search-input" placeholder="Buscar por título, autor o categoría..." autocomplete="off" oninput="filtrarCatalogo()">
           <span class="search-icon">🔍</span>
-          <div id="autocomplete-list" class="autocomplete-suggestions"></div>
         </div>
         
         <div class="advanced-controls">
@@ -427,45 +387,97 @@
       </div>
     </section>
 
-    <!-- MENÚ DESPLEGABLE DE CATEGORÍAS -->
-    <div class="dropdown-categories-wrapper">
-      <button class="dropdown-cat-btn" onclick="toggleDropdownCategorias()">
-        <span><i class="fa-solid fa-layer-group"></i> Explorar Categorías <strong id="cat-selected-label">(Todas)</strong></span>
-        <i class="fa-solid fa-chevron-down" id="dropdown-cat-icon"></i>
-      </button>
-      <div class="dropdown-cat-content" id="dropdown-categories-menu">
-        <div class="categories-pills-grid" id="categories-filter-box"></div>
+    <!-- DROPDOWN CATEGORÍAS & BOTÓN NOVEDADES -->
+    <div class="cat-novedades-bar">
+      <div class="dropdown-categories-wrapper">
+        <button class="dropdown-cat-btn" onclick="toggleDropdownCategorias()">
+          <span><i class="fa-solid fa-layer-group"></i> Explorar Categorías <strong id="cat-selected-label">(Todas)</strong></span>
+          <i class="fa-solid fa-chevron-down" id="dropdown-cat-icon"></i>
+        </button>
+        <div class="dropdown-cat-content" id="dropdown-categories-menu">
+          <div class="categories-pills-grid" id="categories-filter-box"></div>
+        </div>
       </div>
+
+      <button class="btn-novedades-pill" id="btn-filtro-novedades" onclick="toggleFiltroNovedades()">
+        <i class="fa-solid fa-fire"></i> Novedades
+      </button>
     </div>
 
-    <!-- BANNER PEDIDOS ESPECIALES SI NO ENCUENTRA UN LIBRO -->
+    <!-- BANNER PEDIDOS ESPECIALES -->
     <div class="special-order-banner">
       <div class="special-order-info">
         <h4>¿No encuentras el libro que buscas?</h4>
         <p>Te lo conseguimos sobre pedido. Envíanos un mensaje con el título y autor.</p>
       </div>
-      <a href="#" id="btn-pedir-wa" target="_blank" class="btn-special-wa">
+      <a href="https://wa.me/5217220000000?text=Hola,%20busco%20un%20libro%20sobre%20pedido" id="btn-pedir-wa" target="_blank" class="btn-special-wa">
         <i class="fa-brands fa-whatsapp"></i> Solicitar por WhatsApp
       </a>
     </div>
 
-    <!-- CONTENEDOR PRINCIPAL DE LIBROS -->
+    <!-- REJILLA DE LIBROS -->
     <section class="container" id="book-list"></section>
-    
-    <div class="pagination-container" id="pagination-box"></div>
+
+    <!-- BANNER SUCURSAL LOCAL Y MAPA REAL -->
+    <section class="local-store-banner">
+      <div class="local-store-content" style="width: 100%;">
+        <h3><i class="fa-solid fa-store"></i> Visítanos en Santiago Tianguistenco</h3>
+        <p id="store-address-text">Plaza San José, Local 20. Pasa a explorar nuestras repisas o a recoger tu pedido apartado online.</p>
+        <div class="map-container" id="store-map-box" style="display: block;">
+          <iframe id="store-iframe" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3766.837895420202!2d-99.47000002495682!3d19.170600048805623!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cdf8f32a76f283%3A0xb3535d97f3b89ef7!2sPlaza%20San%20Jos%C3%A9!5e0!3m2!1ses-419!2smx!4v1700000000000!5m2!1ses-419!2smx" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+      </div>
+      <a href="https://maps.google.com/?q=Plaza+San+Jose+Santiago+Tianguistenco" id="btn-gmaps-link" target="_blank" class="btn-visit-store">
+        <i class="fa-solid fa-location-dot"></i> Ver en Google Maps
+      </a>
+    </section>
+
+    <!-- RESEÑAS Y COMENTARIOS DE CLIENTES -->
+    <section class="testimonials-section">
+      <h3 class="section-title">Opiniones y Recomendaciones</h3>
+      <p style="text-align: center; color: var(--text-muted); font-size: 0.95rem;">¿Nos visitaste o compraste un libro? Déjanos tu comentario.</p>
+      
+      <div class="testimonials-grid" id="comments-container"></div>
+
+      <!-- FORMULARIO DE COMENTARIOS -->
+      <div class="comments-form-card">
+        <h4 style="margin-bottom: 1rem; color: var(--color-primario);"><i class="fa-regular fa-comment-dots"></i> Dejar una Recomendación</h4>
+        <form id="public-comment-form" onsubmit="guardarComentario(event)" class="admin-form" style="margin: 0;">
+          <div class="form-row">
+            <div>
+              <label>Tu Nombre / Usuario</label>
+              <input type="text" id="comment-author" required placeholder="Ej. Carlos M.">
+            </div>
+            <div>
+              <label>Valoración</label>
+              <select id="comment-rating">
+                <option value="5">⭐⭐⭐⭐⭐ (5/5 Excelente)</option>
+                <option value="4">⭐⭐⭐⭐ (4/5 Muy Bueno)</option>
+                <option value="3">⭐⭐⭐ (3/5 Bueno)</option>
+                <option value="2">⭐⭐ (2/5 Regular)</option>
+                <option value="1">⭐ (1/5 Malo)</option>
+              </select>
+            </div>
+          </div>
+          <label>Tu Comentario u Opinión</label>
+          <textarea id="comment-text" rows="3" required placeholder="Cuéntanos tu experiencia con nuestro servicio o recomiendanos una lectura..."></textarea>
+          <button type="submit" class="btn-primary" style="flex: none; width: 100%;"><i class="fa-solid fa-paper-plane"></i> Publicar Opinión</button>
+        </form>
+      </div>
+    </section>
 
     <section class="info-sections">
       <div class="info-card">
         <h3><i class="fa-solid fa-book-open"></i> Acerca de Nosotros</h3>
-        <p>Bienvenidos a <strong>Librería Milenium</strong>. Somos un espacio dedicado a conectar las mentes curiosas con las mejores historias, textos académicos y obras literarias.</p>
+        <p>Bienvenidos a <strong>Librería Milenium</strong>. Somos un espacio dedicado a conectar mentes curiosas con las mejores historias, clásicos literarios, sagas juveniles y novedades editoriales en Santiago Tianguistenco.</p>
       </div>
       <div class="info-card">
         <h3><i class="fa-solid fa-handshake"></i> Cómo Trabajamos</h3>
-        <p>Hacer tuyo tu próximo libro favorito es sumamente sencillo en nuestro portal:</p>
-        <ul>
-          <li>Explora nuestro inventario actualizado en tiempo real.</li>
-          <li>Revisa la disponibilidad de cada título.</li>
-          <li>Visítanos en nuestra sucursal o contáctanos por WhatsApp para apartar tu ejemplar.</li>
+        <p>Hacer tuyo tu próximo libro favorito es fácil y directo:</p>
+        <ul style="margin-left: 1.2rem; margin-top: 0.5rem;">
+          <li>Explora nuestro inventario en línea en tiempo real.</li>
+          <li>Consulta la disponibilidad inmediata en la tienda.</li>
+          <li>Haz tu apartado vía WhatsApp o visítanos directamente en Plaza San José.</li>
         </ul>
       </div>
     </section>
@@ -483,7 +495,7 @@
         <h2 id="qv-title" class="modal-qv-title"></h2>
         <p id="qv-author" class="book-author"></p>
         <p id="qv-resume" class="modal-qv-resume"></p>
-        <div style="display:flex; justify-style:space-between; align-items:center; margin-top:auto;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:auto;">
           <span id="qv-price" class="book-price"></span>
           <a id="qv-btn-wa" href="" target="_blank" class="btn-order-wa"><i class="fa-brands fa-whatsapp"></i> Apartar Ahora</a>
         </div>
@@ -491,220 +503,213 @@
     </div>
   </div>
 
-  <!-- FOOTER EDITABLE -->
-  <footer>
-    <div class="footer-content">
-      <div class="footer-brand">
-        <h2>Librería Milenium</h2>
-        <p>Tu rincón literario favorito.</p>
-        <div class="social-links">
-          <a href="#" id="link-fb" class="social-icon" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
-          <a href="#" id="link-ig" class="social-icon" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-          <a href="#" id="link-wa" class="social-icon" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
-        </div>
-      </div>
-      
-      <div class="footer-links">
-        <h4><i class="fa-solid fa-clock"></i> Horarios</h4>
-        <p id="footer-horarios-txt">Lunes a Sábado<br>9:00 AM - 7:30 PM</p>
-      </div>
-
-      <div class="footer-map-container">
-        <h4><i class="fa-solid fa-location-dot"></i> Ubicación</h4>
-        <p id="footer-direccion-txt" style="font-size:0.85rem;">Plaza San José, Local 20, Santiago Tianguistenco, Edo. de México.</p>
-        <div id="footer-mapa-box">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3766.188735237841!2d-99.47048032483375!3d19.17600868204918!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cdf32d200fb16f%3A0x6a0f443aef6cb3d!2sSantiago%20Tianguistenco%20de%20Galeana%20Centro%2C%20Méx.!5e0!3m2!1ses!2smx!4v1700000000000!5m2!1ses!2smx" allowfullscreen="" loading="lazy"></iframe>
-        </div>
-      </div>
-
-      <div class="qr-box">
-        <h4>Escanea la Web</h4>
-        <img id="main-qr" src="" alt="Código QR">
-      </div>
-    </div>
-    <div class="footer-bottom">&copy; 2026 Librería Milenium. Todos los derechos reservados.</div>
-  </footer>
-
-  <button class="theme-toggle-btn" onclick="conmutarModoOscuro()">🌓</button>
-
-  <!-- PANEL DE ADMINISTRACIÓN COMPACTO -->
+  <!-- OVERLAY Y PANEL DE ADMINISTRACIÓN -->
   <div id="admin-overlay" onclick="cerrarAdminPanel()"></div>
   <div id="admin-panel">
     <div class="panel-header">
-      <h3>Panel de Control Integral</h3>
-      <div class="panel-header-actions">
-        <button class="logout-panel-btn" onclick="cerrarSesionAdmin()"><i class="fa-solid fa-lock"></i> Cerrar Sesión</button>
-        <button class="close-panel-btn" onclick="cerrarAdminPanel()">&times;</button>
+      <h3><i class="fa-solid fa-sliders"></i> Panel Administrador</h3>
+      <button class="close-panel-btn" onclick="cerrarAdminPanel()">&times;</button>
+    </div>
+
+    <!-- ESTADÍSTICAS DASHBOARD -->
+    <div class="admin-stats-grid">
+      <div class="stat-card">
+        <div class="stat-card-title">Total Títulos</div>
+        <div class="stat-card-value" id="stat-total-books">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-title">Disponibles</div>
+        <div class="stat-card-value" style="color:#10b981;" id="stat-available-books">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-title">Valor Inventario</div>
+        <div class="stat-card-value" style="color:var(--color-acento);" id="stat-total-value">$0.00</div>
       </div>
     </div>
 
-    <!-- ESTADÍSTICAS REAL-TIME -->
-    <div class="admin-stats-grid">
-      <div class="stat-box"><div class="stat-number" id="stat-total">0</div><div class="stat-label">Total Libros</div></div>
-      <div class="stat-box"><div class="stat-number" id="stat-disp">0</div><div class="stat-label">Disponibles</div></div>
-      <div class="stat-box"><div class="stat-number" id="stat-agot">0</div><div class="stat-label">Agotados</div></div>
-      <div class="stat-box"><div class="stat-number" id="stat-desc">0</div><div class="stat-label">Descontinuados</div></div>
+    <!-- CONFIGURACIÓN DE COLORES Y LOGOS -->
+    <div class="admin-card">
+      <h4 style="margin-bottom:1rem;"><i class="fa-solid fa-palette"></i> Personalizar Marca y Estilos</h4>
+      <form class="admin-form" id="theme-logo-form" onsubmit="guardarEstilosYLogos(event)">
+        <div class="form-row">
+          <div>
+            <label>URL Logotipo Izquierdo</label>
+            <input type="url" id="config-logo-left" value="https://i.postimg.cc/ZYGd9Hh8/l-OGO-TERMINADO.png">
+          </div>
+          <div>
+            <label>URL Logotipo Derecho</label>
+            <input type="url" id="config-logo-right" value="https://i.postimg.cc/ZYGd9Hh8/l-OGO-TERMINADO.png">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div>
+            <label>Color Primario</label>
+            <input type="color" id="config-color-primario" class="color-picker-input" value="#1e3c72">
+          </div>
+          <div>
+            <label>Color Secundario</label>
+            <input type="color" id="config-color-secundario" class="color-picker-input" value="#2a5298">
+          </div>
+          <div>
+            <label>Color Acento</label>
+            <input type="color" id="config-color-acento" class="color-picker-input" value="#f59e0b">
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary" style="flex: none; width: 100%;"><i class="fa-solid fa-paintbrush"></i> Aplicar Cambios Visuales</button>
+      </form>
     </div>
 
-    <div class="admin-tabs">
-      <button class="admin-tab active" onclick="cambiarPestañaAdmin('tab-libros', this)"><i class="fa-solid fa-box"></i> Gestión de Libros</button>
-      <button class="admin-tab" onclick="cambiarPestañaAdmin('tab-diseno', this)"><i class="fa-solid fa-palette"></i> Personalización y Ubicación</button>
+    <!-- CONFIGURACIÓN DE INFORMACIÓN DEL SITIO -->
+    <div class="admin-card">
+      <h4 style="margin-bottom:1rem;"><i class="fa-solid fa-store"></i> Ajustes de Sucursal y Contacto</h4>
+      <form class="admin-form" id="config-form" onsubmit="guardarConfiguracionSitio(event)">
+        <label>Dirección Física</label>
+        <input type="text" id="config-direccion" value="Plaza San José, Local 20, Santiago Tianguistenco, Estado de México">
+        
+        <label>URL / Src de Iframe de Google Maps</label>
+        <input type="text" id="config-iframe" placeholder="https://www.google.com/maps/embed?...">
+        
+        <div class="form-row">
+          <div>
+            <label>Horarios de Atención</label>
+            <input type="text" id="config-horarios" value="Lunes a Sábado de 11:00 am - 19:30 pm">
+          </div>
+          <div>
+            <label>Enlace WhatsApp Oficial</label>
+            <input type="text" id="config-whatsapp" value="https://wa.me/5217220000000">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div>
+            <label>Facebook</label>
+            <input type="text" id="config-facebook" placeholder="https://facebook.com/libreriamilenium">
+          </div>
+          <div>
+            <label>Instagram</label>
+            <input type="text" id="config-instagram" placeholder="https://instagram.com/libreriamilenium">
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary" style="flex: none; width: 100%;"><i class="fa-solid fa-floppy-disk"></i> Guardar Configuración</button>
+      </form>
     </div>
     
-    <div id="tab-libros" class="tab-content active">
-      <div class="admin-card">
-        <div class="admin-card-title">
-          <span id="panel-title"><i class="fa-solid fa-plus-circle"></i> Agregar Nuevo Libro</span>
+    <!-- FORMULARIO MANUAL DE LIBROS (SIN AUTO-FILL IA) -->
+    <div class="admin-card">
+      <h4 style="margin-bottom:1rem;" id="admin-form-title">Agregar Nuevo Libro</h4>
+      <form class="admin-form" id="book-form" onsubmit="guardarLibro(event)">
+        <input type="hidden" id="edit-book-id" value="">
+        <div class="form-row">
+          <div>
+            <label>Título del Libro</label>
+            <input type="text" id="input-title" required placeholder="Ej. Alas de Sangre">
+          </div>
+          <div>
+            <label>Autor</label>
+            <input type="text" id="input-author" required placeholder="Ej. Rebecca Yarros">
+          </div>
         </div>
+        <div class="form-row">
+          <div>
+            <label>Precio ($ MXN)</label>
+            <input type="number" id="input-price" step="0.01" required placeholder="350.00">
+          </div>
+          <div>
+            <label>Categoría(s)</label>
+            <input type="text" id="input-category" placeholder="Ej. Fantasía, Juvenil">
+          </div>
+          <div>
+            <label>Estado</label>
+            <select id="input-status">
+              <option value="Disponible">Disponible</option>
+              <option value="Agotado">Agotado</option>
+              <option value="Descontinuado">Descontinuado</option>
+              <option value="Preventa">En Pre-venta</option>
+              <option value="Proximamente">Próximamente</option>
+            </select>
+          </div>
+        </div>
+        <label>URL de Portada (Imagen)</label>
+        <input type="url" id="input-image" placeholder="https://ejemplo.com/portada.jpg" required>
         
-        <form class="admin-form" id="book-form" onsubmit="guardarLibro(event)">
-          <input type="hidden" id="edit-idFirebase" value="">
-          
-          <div class="form-row">
-            <div>
-              <label>Título del Libro</label>
-              <input type="text" id="form-titulo" required>
-            </div>
-            <div>
-              <label>Autor</label>
-              <input type="text" id="form-autor" required>
-            </div>
-          </div>
-
-          <!-- BOTÓN AUTOCOMPLETADO AUTOMÁTICO VÍA IA / GOOGLE BOOKS API -->
-          <button type="button" class="btn-ai-autofill" onclick="autocompletarLibroIA()">
-            <i class="fa-solid fa-wand-magic-sparkles"></i> Buscar y Auto-completar datos con IA
-          </button>
-
-          <div class="form-img-preview-container">
-            <div class="form-inputs-side">
-              <label>URL de la Imagen Portada</label>
-              <input type="url" id="form-imagen" oninput="actualizarLivePreview(this.value)" required>
-              
-              <div class="form-row">
-                <div>
-                  <label>Categoría Principal</label>
-                  <input type="text" id="form-categoria" placeholder="ej. Fantasía" required>
-                </div>
-                <div>
-                  <label>Categoría Secundaria (Opcional)</label>
-                  <input type="text" id="form-categoria2" placeholder="ej. Romántica">
-                </div>
-              </div>
-            </div>
-            <div class="live-preview-box">
-              <img id="form-live-img" src="https://via.placeholder.com/140x200?text=Sin+Portada" alt="Vista Previa">
-            </div>
-          </div>
-
-          <label>Resumen / Descripción Corta</label>
-          <textarea id="form-resumen" rows="2"></textarea>
-          
-          <div class="form-row">
-            <div>
-              <label>Precio ($)</label>
-              <input type="number" id="form-precio" required>
-            </div>
-            <div>
-              <label>Disponibilidad</label>
-              <select id="form-disponible">
-                <option value="true">Disponible</option>
-                <option value="false">Agotado</option>
-                <option value="discontinued">Descontinuado</option>
-              </select>
-            </div>
-          </div>
-          
-          <div class="admin-action-btn-row">
-            <button type="submit" class="btn-primary" id="submit-form-btn">Guardar Libro en Catálogo</button>
-          </div>
-        </form>
-      </div>
-
-      <!-- INVENTARIO COMPACTO CON BUSCADOR INTERNO -->
-      <div class="management-section">
-        <div class="admin-table-controls">
-          <h4><i class="fa-solid fa-list-check"></i> Inventario (<span id="count-tabla-admin">0</span>)</h4>
-          <div class="admin-table-search">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="search-admin-table" placeholder="Filtrar en inventario..." oninput="filtrarTablaAdmin(this.value)">
-          </div>
+        <label>Resumen / Sinopsis</label>
+        <textarea id="input-resume" rows="3" placeholder="Sinopsis del libro..."></textarea>
+        
+        <div class="btn-group-admin">
+          <button type="submit" class="btn-primary" id="btn-save-book"><i class="fa-solid fa-floppy-disk"></i> Guardar Libro</button>
+          <button type="button" class="btn-secondary" onclick="resetFormulario()"><i class="fa-solid fa-xmark"></i> Cancelar</button>
         </div>
-
-        <div class="table-container">
-          <table class="management-table">
-            <thead>
-              <tr><th>Portada</th><th>Título</th><th>Autor</th><th>Precio</th><th>Estado</th><th>Acciones</th></tr>
-            </thead>
-            <tbody id="management-table-body"></tbody>
-          </table>
-        </div>
-      </div>
+      </form>
     </div>
 
-    <!-- PESTAÑA PERSONALIZACIÓN Y UBICACIÓN DE LA TIENDA -->
-    <div id="tab-diseno" class="tab-content">
-      <div class="admin-card">
-        <div class="admin-card-title">
-          <span><i class="fa-solid fa-sliders"></i> Ajustes Visuales y Redes</span>
-          <button class="btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.8rem" onclick="respaldarInventario(event)"><i class="fa-solid fa-download"></i> Respaldar Base Datos</button>
-        </div>
-        <form class="admin-form" onsubmit="guardarAjustes(event)">
-          <label>URL del Logotipo</label>
-          <input type="url" id="input-url-logo">
-          <label>URL Código QR (Vacío para automático)</label>
-          <input type="url" id="input-url-qr">
-          
-          <div class="form-row">
-            <div>
-              <label>Color Principal</label>
-              <input type="color" id="input-color-primario" value="#1e3c72">
-            </div>
-            <div>
-              <label>Color Secundario</label>
-              <input type="color" id="input-color-secundario" value="#2a5298">
-            </div>
-            <div>
-              <label>Recuadro de Tarjetas</label>
-              <input type="color" id="input-color-recuadro" value="#e2e8f0">
-            </div>
-          </div>
-
-          <hr style="margin: 1rem 0; border:0; border-top:1px solid var(--border-color);">
-          <div class="admin-card-title" style="margin-bottom:0.8rem;">
-            <span><i class="fa-solid fa-location-dot"></i> Ubicación y Datos del Local Físico</span>
-          </div>
-
-          <label>Dirección Completa (Pie de Página)</label>
-          <input type="text" id="input-local-direccion" placeholder="Ej: Plaza San José, Local 20, Santiago Tianguistenco">
-
-          <label>Enlace Iframe de Google Maps (Iframe Src)</label>
-          <input type="text" id="input-local-mapa" placeholder="Coloca aquí la URL del src del iframe de Google Maps">
-
-          <label>Horarios de Atención</label>
-          <input type="text" id="input-local-horario" placeholder="Ej: Lunes a Sábado - 9:00 AM a 7:30 PM">
-
-          <hr style="margin: 1rem 0; border:0; border-top:1px solid var(--border-color);">
-
-          <label>WhatsApp (Número con código de país)</label>
-          <input type="text" id="input-social-wa">
-          <label>Facebook (URL)</label>
-          <input type="url" id="input-social-fb">
-          <label>Instagram (URL)</label>
-          <input type="url" id="input-social-ig">
-
-          <button type="submit" class="btn-primary">Aplicar Cambios del Sitio</button>
-        </form>
+    <!-- TABLA DE CONTROL DE INVENTARIO -->
+    <div class="admin-card">
+      <div class="admin-table-controls">
+        <h4 style="margin:0;">Inventario Registrado</h4>
+        <input type="text" id="admin-search-tbl" class="admin-search-input" placeholder="Buscar en la tabla..." oninput="filtrarTablaAdmin()">
+      </div>
+      <div class="table-container">
+        <table class="management-table">
+          <thead>
+            <tr>
+              <th>Portada</th>
+              <th>Título y Autor</th>
+              <th>Categoría</th>
+              <th>Precio</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="admin-table-body"></tbody>
+        </table>
       </div>
     </div>
   </div>
 
-  <script>
-    const ADMIN_PASSWORD = "mileniumadmin"; 
+  <button class="theme-toggle-btn" onclick="toggleTheme()"><i class="fa-solid fa-moon" id="theme-icon"></i></button>
 
-    // CONFIGURACIÓN DE FIREBASE
-    // Remplaza estas variables con tus claves reales obtenidas desde la consola de Firebase:
-    // Firebase Console -> Configuración del proyecto -> Aplicaciones web -> SDK setup
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h2>Librería Milenium</h2>
+        <p>Tu rincón literario preferido en Santiago Tianguistenco.</p>
+        <div class="social-links">
+          <a href="#" id="footer-fb" class="social-icon" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" id="footer-ig" class="social-icon" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://wa.me/5217220000000" id="footer-wa" class="social-icon" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+      </div>
+      
+      <div class="footer-links">
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="#search-section">Catálogo Completo</a></li>
+          <li><a href="#search-section">Novedades</a></li>
+          <li><a href="#btn-pedir-wa">Pedidos Especiales</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links">
+        <h4>Ubicación</h4>
+        <p style="font-size:0.88rem; color:#9ca3af;" id="footer-direccion-txt">Plaza San José, Local 20<br>Santiago Tianguistenco, Estado de México.</p>
+      </div>
+
+      <div class="qr-box">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://libreriamilenium.com" alt="QR Catálogo">
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Librería Milenium. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT CONEXIÓN A FIREBASE Y LÓGICA GENERAL -->
+  <script>
+    // CONFIGURACIÓN FIREBASE REALTIME DATABASE
     const firebaseConfig = {
       apiKey: "AIzaSyCcEaD_xECtdta6FfsTBA3oZB-sIZp_Svk",
       authDomain: "libreria-milenium-pruebas.firebaseapp.com",
@@ -712,654 +717,517 @@
       storageBucket: "libreria-milenium-pruebas.firebasestorage.app",
       messagingSenderId: "18043897648",
       appId: "1:18043897648:web:8a10a265dc1af463946af5"
-     };
+    };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    let misLibros = [];
-    let configuracionSitio = {};
-    let categoriaSeleccionada = "Todas";
-    let adminAutenticado = false;
-
-    let limiteLibrosPorPagina = 8;
-    let paginaActual = 1;
-
-    let carouselIndex = 0;
-    let autoPlayInterval = null;
-
-    function lanzarToast(mensaje) {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.innerHTML = `<i class="fa-solid fa-circle-info"></i> <span>${mensaje}</span>`;
-      container.appendChild(toast);
-      setTimeout(() => { toast.remove(); }, 3500);
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
     }
+    const db = firebase.database();
+    const booksRef = db.ref('libros');
+    const configRef = db.ref('configuracion_sitio');
+    const commentsRef = db.ref('comentarios');
 
-    function conectarBaseDeDatos() {
-      db.ref('configuracion').on('value', (snapshot) => {
-        const data = snapshot.val();
-        if (data) configuracionSitio = data;
-        aplicarConfiguracionVisual();
-        cargarValoresAjustesEnForm();
-      });
+    // ESTADOS DE NAVEGACIÓN
+    let librosGlobal = [];
+    let comentariosGlobal = [];
+    let configGlobal = {};
+    let categoriaActiva = 'Todas';
+    let filtroNovedadesActivo = false;
+    let carruselPosicion = 0;
+    let carruselInterval = null;
 
-      db.ref('libros').on('value', (snapshot) => {
+    document.addEventListener('DOMContentLoaded', () => {
+      cargarFondoAnimado();
+      escucharBaseDeDatos();
+      escucharConfiguracion();
+      escucharComentarios();
+      iniciarCarruselAuto();
+    });
+
+    // 1. SINCRONIZACIÓN EN TIEMPO REAL
+    function escucharBaseDeDatos() {
+      booksRef.on('value', (snapshot) => {
         const data = snapshot.val();
-        misLibros = [];
+        librosGlobal = [];
         if (data) {
           Object.keys(data).forEach(key => {
-            misLibros.push({ idFirebase: key, ...data[key] });
+            librosGlobal.push({ id: key, ...data[key] });
           });
         }
-        calcularEstadisticasAdmin();
-        renderizarCategorias();
+        actualizarCategoriasDinamicas();
         renderizarCatalogo();
+        renderizarCarrusel();
+        actualizarEstadisticasAdmin();
         renderizarTablaAdmin();
-        iniciarAutoPlayCarrusel();
       });
     }
 
-    function inicializarWeb() {
-      const temaGuardado = localStorage.getItem("milenium-theme");
-      if (temaGuardado) {
-        document.documentElement.setAttribute("data-theme", temaGuardado);
+    function escucharConfiguracion() {
+      configRef.on('value', (snapshot) => {
+        configGlobal = snapshot.val() || {};
+        
+        if (configGlobal.logoLeft) {
+          document.getElementById('main-logo-left').src = configGlobal.logoLeft;
+          document.getElementById('config-logo-left').value = configGlobal.logoLeft;
+        }
+        if (configGlobal.logoRight) {
+          document.getElementById('main-logo-right').src = configGlobal.logoRight;
+          document.getElementById('config-logo-right').value = configGlobal.logoRight;
+        }
+
+        if (configGlobal.colorPrimary) {
+          document.documentElement.style.setProperty('--color-primario', configGlobal.colorPrimary);
+          document.getElementById('config-color-primario').value = configGlobal.colorPrimary;
+        }
+        if (configGlobal.colorSecondary) {
+          document.documentElement.style.setProperty('--color-secundario', configGlobal.colorSecondary);
+          document.getElementById('config-color-secundario').value = configGlobal.colorSecondary;
+        }
+        if (configGlobal.colorAccent) {
+          document.documentElement.style.setProperty('--color-acento', configGlobal.colorAccent);
+          document.getElementById('config-color-acento').value = configGlobal.colorAccent;
+        }
+
+        if (configGlobal.direccion) {
+          document.getElementById('store-address-text').textContent = configGlobal.direccion;
+          document.getElementById('footer-direccion-txt').innerText = configGlobal.direccion;
+          document.getElementById('config-direccion').value = configGlobal.direccion;
+        }
+        if (configGlobal.iframeMap) {
+          document.getElementById('store-iframe').src = configGlobal.iframeMap;
+          document.getElementById('config-iframe').value = configGlobal.iframeMap;
+        }
+        if (configGlobal.horarios) {
+          document.getElementById('top-bar-horarios').innerHTML = `<i class="fa-regular fa-clock"></i> ${configGlobal.horarios}`;
+          document.getElementById('config-horarios').value = configGlobal.horarios;
+        }
+        if (configGlobal.whatsapp) {
+          document.getElementById('hero-btn-wa').href = configGlobal.whatsapp;
+          document.getElementById('btn-pedir-wa').href = `${configGlobal.whatsapp}?text=Hola,%20busco%20un%20libro%20sobre%20pedido`;
+          document.getElementById('footer-wa').href = configGlobal.whatsapp;
+          document.getElementById('config-whatsapp').value = configGlobal.whatsapp;
+        }
+      });
+    }
+
+    function escucharComentarios() {
+      commentsRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        comentariosGlobal = [];
+        if (data) {
+          Object.keys(data).forEach(key => {
+            comentariosGlobal.push({ id: key, ...data[key] });
+          });
+        }
+        renderizarComentarios();
+      });
+    }
+
+    // 2. RENDERING Y FILTRADO
+    function renderizarCatalogo() {
+      const container = document.getElementById('book-list');
+      const busqueda = document.getElementById('search-input').value.toLowerCase().trim();
+      const orden = document.getElementById('control-ordenar').value;
+      const precioMax = parseFloat(document.getElementById('control-precio-rango').value);
+
+      let listaOrigen = filtroNovedadesActivo ? librosGlobal.slice(-8).reverse() : librosGlobal;
+
+      let filtrados = listaOrigen.filter(libro => {
+        const coincideCat = (categoriaActiva === 'Todas') || (libro.categoria && libro.categoria.includes(categoriaActiva));
+        const coincideBusqueda = (libro.titulo && libro.titulo.toLowerCase().includes(busqueda)) || 
+                                 (libro.autor && libro.autor.toLowerCase().includes(busqueda)) ||
+                                 (libro.categoria && libro.categoria.toLowerCase().includes(busqueda));
+        const precioValido = parseFloat(libro.precio || 0) <= precioMax;
+        return coincideCat && coincideBusqueda && precioValido;
+      });
+
+      if (orden === 'price-asc') filtrados.sort((a,b) => parseFloat(a.precio) - parseFloat(b.precio));
+      if (orden === 'price-desc') filtrados.sort((a,b) => parseFloat(b.precio) - parseFloat(a.precio));
+      if (orden === 'alpha') filtrados.sort((a,b) => (a.titulo || '').localeCompare(b.titulo || ''));
+
+      container.innerHTML = '';
+      if (filtrados.length === 0) {
+        container.innerHTML = `<div class="no-results">No se encontraron libros que coincidan con el criterio.</div>`;
+        return;
+      }
+
+      const waBase = configGlobal.whatsapp || "https://wa.me/5217220000000";
+
+      filtrados.forEach(libro => {
+        const estadoClase = libro.estado === 'Disponible' ? 'available' : 'not-available';
+        const msgWa = encodeURIComponent(`Hola, quiero apartar el libro "${libro.titulo}" de ${libro.autor}.`);
+        
+        const card = document.createElement('div');
+        card.className = 'book';
+        card.onclick = () => abrirVistaRapida(libro);
+        card.innerHTML = `
+          <div class="book-image-container">
+            <img src="${libro.imagen || 'https://via.placeholder.com/150x220'}" alt="${libro.titulo}">
+          </div>
+          <h4>${libro.titulo}</h4>
+          <p class="book-author">${libro.autor}</p>
+          <p class="book-resume">${libro.resumen || 'Sin descripción disponible.'}</p>
+          <div class="book-details">
+            <div class="categories-tag-group">
+              <span class="book-category">${libro.categoria || 'General'}</span>
+            </div>
+            <span class="book-availability ${estadoClase}">${libro.estado || 'Disponible'}</span>
+          </div>
+          <div class="book-footer-row" onclick="event.stopPropagation()">
+            <span class="book-price">$${parseFloat(libro.precio || 0).toFixed(2)}</span>
+            <a href="${waBase}?text=${msgWa}" target="_blank" class="btn-order-wa"><i class="fa-brands fa-whatsapp"></i> Apartar</a>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // 3. CATEGORÍAS & NOVEDADES
+    function toggleFiltroNovedades() {
+      filtroNovedadesActivo = !filtroNovedadesActivo;
+      const btn = document.getElementById('btn-filtro-novedades');
+      
+      if (filtroNovedadesActivo) {
+        btn.classList.add('active');
+        mostrarToast("Mostrando sólo novedades recientes");
       } else {
-        const prefiereOscuro = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        document.documentElement.setAttribute("data-theme", prefiereOscuro ? "dark" : "light");
+        btn.classList.remove('active');
       }
-
-      const listContenedor = document.getElementById('book-list');
-      let htmlSkeletons = "";
-      for(let i=0; i<4; i++) {
-        htmlSkeletons += `
-          <div class="skeleton-card">
-            <div class="skeleton-pulse" style="height:280px; width:100%"></div>
-            <div class="skeleton-pulse" style="height:22px; width:80%"></div>
-            <div class="skeleton-pulse" style="height:14px; width:50%"></div>
-          </div>`;
-      }
-      listContenedor.innerHTML = htmlSkeletons;
-
-      conectarBaseDeDatos();
-      iniciarLibrosFlotantes();
-      configurarBuscadorInteligente();
-    }
-
-    function conmutarModoOscuro() {
-      const temaActual = document.documentElement.getAttribute("data-theme");
-      const nuevoTema = temaActual === "dark" ? "light" : "dark";
-      document.documentElement.setAttribute("data-theme", nuevoTema);
-      localStorage.setItem("milenium-theme", nuevoTema);
-      lanzarToast(`Modo ${nuevoTema === 'dark' ? 'oscuro' : 'claro'} activado`);
-    }
-
-    function aplicarConfiguracionVisual() {
-      document.documentElement.style.setProperty('--color-primario', configuracionSitio.color1 || '#1e3c72');
-      document.documentElement.style.setProperty('--color-secundario', configuracionSitio.color2 || '#2a5298');
-      document.documentElement.style.setProperty('--border-book-card', configuracionSitio.colorRecuadro || '#e2e8f0');
-      document.getElementById('main-logo').src = configuracionSitio.logo || 'https://i.postimg.cc/ZYGd9Hh8/l-OGO-TERMINADO.png';
-      
-      const urlActual = window.location.href;
-      document.getElementById('main-qr').src = configuracionSitio.qr ? configuracionSitio.qr : `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(urlActual)}`;
-      document.getElementById('link-wa').href = configuracionSitio.whatsapp || '#';
-      document.getElementById('link-fb').href = configuracionSitio.facebook || '#';
-      document.getElementById('link-ig').href = configuracionSitio.instagram || '#';
-
-      if (configuracionSitio.direccion) {
-        document.getElementById('footer-direccion-txt').innerText = configuracionSitio.direccion;
-      }
-      if (configuracionSitio.horario) {
-        document.getElementById('footer-horarios-txt').innerHTML = configuracionSitio.horario.replace(/\n/g, '<br>');
-      }
-      if (configuracionSitio.mapaUrl) {
-        document.getElementById('footer-mapa-box').innerHTML = `<iframe src="${configuracionSitio.mapaUrl}" allowfullscreen="" loading="lazy"></iframe>`;
-      }
-
-      const numeroWa = configuracionSitio.whatsapp ? configuracionSitio.whatsapp.replace(/\D/g, "") : "521234567890";
-      const textoPedido = encodeURIComponent("¡Hola Librería Milenium! Me gustaría cotizar o pedir un libro que no encontré en su catálogo web.");
-      document.getElementById('btn-pedir-wa').href = `https://wa.me/${numeroWa}?text=${textoPedido}`;
-    }
-
-    function cargarValoresAjustesEnForm() {
-      if(!configuracionSitio.color1) return;
-      document.getElementById('input-url-logo').value = configuracionSitio.logo || "";
-      document.getElementById('input-url-qr').value = configuracionSitio.qr || "";
-      document.getElementById('input-color-primario').value = configuracionSitio.color1;
-      document.getElementById('input-color-secundario').value = configuracionSitio.color2;
-      document.getElementById('input-color-recuadro').value = configuracionSitio.colorRecuadro || "#e2e8f0";
-      
-      document.getElementById('input-local-direccion').value = configuracionSitio.direccion || "";
-      document.getElementById('input-local-mapa').value = configuracionSitio.mapaUrl || "";
-      document.getElementById('input-local-horario').value = configuracionSitio.horario || "";
-
-      document.getElementById('input-social-wa').value = configuracionSitio.whatsapp || "";
-      document.getElementById('input-social-fb').value = configuracionSitio.facebook || "";
-      document.getElementById('input-social-ig').value = configuracionSitio.instagram || "";
-    }
-
-    function actualizarLivePreview(url) {
-      const img = document.getElementById('form-live-img');
-      img.src = url ? url : "https://via.placeholder.com/140x200?text=Sin+Portada";
-    }
-
-    function calcularEstadisticasAdmin() {
-      let total = misLibros.length;
-      let disponibles = 0; let agotados = 0; let descontinuados = 0;
-
-      misLibros.forEach(l => {
-        if(l.available === "discontinued") descontinuados++;
-        else if(l.available === false || l.available === "false") agotados++;
-        else disponibles++;
-      });
-
-      document.getElementById('stat-total').innerText = total;
-      document.getElementById('stat-disp').innerText = disponibles;
-      document.getElementById('stat-agot').innerText = agotados;
-      document.getElementById('stat-desc').innerText = descontinuados;
-    }
-
-    function actualizarTextoPrecio(val) {
-      document.getElementById('texto-precio-max').innerText = `$${val}`;
       renderizarCatalogo();
     }
 
-    function guardarAjustes(event) {
-      event.preventDefault();
-      if(!adminAutenticado) return;
-      const nuevosAjustes = {
-        logo: document.getElementById('input-url-logo').value,
-        qr: document.getElementById('input-url-qr').value,
-        color1: document.getElementById('input-color-primario').value,
-        color2: document.getElementById('input-color-secundario').value,
-        colorRecuadro: document.getElementById('input-color-recuadro').value,
-        direccion: document.getElementById('input-local-direccion').value,
-        mapaUrl: document.getElementById('input-local-mapa').value,
-        horario: document.getElementById('input-local-horario').value,
-        whatsapp: document.getElementById('input-social-wa').value,
-        facebook: document.getElementById('input-social-fb').value,
-        instagram: document.getElementById('input-social-ig').value
-      };
-      db.ref('configuracion').set(nuevosAjustes).then(() => {
-        cerrarAdminPanel();
-        lanzarToast("Ajustes e información del local guardados con éxito");
+    function actualizarCategoriasDinamicas() {
+      const container = document.getElementById('categories-filter-box');
+      const categoriasMap = {};
+
+      librosGlobal.forEach(l => {
+        if (l.categoria) {
+          const cats = l.categoria.split(',');
+          cats.forEach(c => {
+            const trimmed = c.trim();
+            if (trimmed) categoriasMap[trimmed] = (categoriasMap[trimmed] || 0) + 1;
+          });
+        }
+      });
+
+      container.innerHTML = `
+        <button class="category-btn ${categoriaActiva === 'Todas' ? 'active' : ''}" onclick="seleccionarCategoria('Todas')">
+          Todas <span class="cat-count-badge">${librosGlobal.length}</span>
+        </button>
+      `;
+
+      Object.keys(categoriasMap).forEach(cat => {
+        container.innerHTML += `
+          <button class="category-btn ${categoriaActiva === cat ? 'active' : ''}" onclick="seleccionarCategoria('${cat}')">
+            ${cat} <span class="cat-count-badge">${categoriasMap[cat]}</span>
+          </button>
+        `;
       });
     }
 
-    function cambiarPestañaAdmin(tabId, boton) {
-      document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
-      document.querySelectorAll('.admin-tab').forEach(at => at.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      boton.classList.add('active');
-    }
-
-    function solicitarAccesoAdmin() {
-      if (adminAutenticado) { abrirAdminPanel(); return; }
-      const passIngresada = prompt("Introduce la contraseña de administrador:");
-      if (passIngresada === ADMIN_PASSWORD) {
-        adminAutenticado = true;
-        lanzarToast("Autenticación exitosa como Administrador");
-        abrirAdminPanel();
-      } else if (passIngresada !== null) {
-        lanzarToast("Acceso Denegado: Contraseña errónea");
-      }
-    }
-
-    function cerrarSesionAdmin() {
-      adminAutenticado = false;
-      cerrarAdminPanel();
-      lanzarToast("Sesión de administrador finalizada");
-    }
-
-    function respaldarInventario(e) {
-      e.preventDefault();
-      if(!adminAutenticado) return;
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(misLibros, null, 2));
-      const downloadAnchorElement = document.createElement('a');
-      downloadAnchorElement.setAttribute("href", dataStr);
-      downloadAnchorElement.setAttribute("download", "respaldo_inventario_milenium.json");
-      document.body.appendChild(downloadAnchorElement);
-      downloadAnchorElement.click();
-      downloadAnchorElement.remove();
-      lanzarToast("Archivo JSON de respaldo generado");
+    function seleccionarCategoria(cat) {
+      categoriaActiva = cat;
+      document.getElementById('cat-selected-label').textContent = `(${cat})`;
+      actualizarCategoriasDinamicas();
+      renderizarCatalogo();
+      document.getElementById('dropdown-categories-menu').classList.remove('show');
     }
 
     function toggleDropdownCategorias() {
-      const menu = document.getElementById('dropdown-categories-menu');
-      const icon = document.getElementById('dropdown-cat-icon');
-      menu.classList.toggle('show');
-      icon.style.transform = menu.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+      document.getElementById('dropdown-categories-menu').classList.toggle('show');
     }
 
-    function renderizarCategorias() {
-      const contenedorFiltros = document.getElementById('categories-filter-box');
-      const conteoCategorias = {};
+    function filtrarCatalogo() { renderizarCatalogo(); }
 
-      misLibros.forEach(l => {
-        if(l.categoria) {
-          const c1 = l.categoria.trim();
-          conteoCategorias[c1] = (conteoCategorias[c1] || 0) + 1;
-        }
-        if(l.categoria2) {
-          const c2 = l.categoria2.trim();
-          conteoCategorias[c2] = (conteoCategorias[c2] || 0) + 1;
-        }
-      });
-
-      let htmlBotones = `
-        <button class="category-btn ${categoriaSeleccionada === 'Todas' ? 'active' : ''}" onclick="filtrarPorCategoria('Todas')">
-          Todas <span class="cat-count-badge">${misLibros.length}</span>
-        </button>`;
-
-      Object.keys(conteoCategorias).sort().forEach(cat => {
-        htmlBotones += `
-          <button class="category-btn ${categoriaSeleccionada === cat ? 'active' : ''}" onclick="filtrarPorCategoria('${cat}')">
-            ${cat} <span class="cat-count-badge">${conteoCategorias[cat]}</span>
-          </button>`;
-      });
-
-      contenedorFiltros.innerHTML = htmlBotones;
-    }
-
-    function filtrarPorCategoria(categoria) {
-      categoriaSeleccionada = categoria;
-      paginaActual = 1; 
-      document.getElementById('cat-selected-label').innerText = `(${categoria})`;
-      renderizarCategorias();
-      renderizarCatalogo();
-      
-      const menu = document.getElementById('dropdown-categories-menu');
-      if(menu.classList.contains('show')) toggleDropdownCategorias();
-    }
-
-    function autocompletarLibroIA() {
-      const titulo = document.getElementById('form-titulo').value.trim();
-      const autor = document.getElementById('form-autor').value.trim();
-
-      if (!titulo) {
-        lanzarToast("Escribe al menos el título para buscar datos.");
-        return;
-      }
-
-      lanzarToast("🔍 Obteniendo información...");
-      const query = encodeURIComponent(`${titulo} ${autor}`);
-      
-      fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.items && data.items.length > 0) {
-            const info = data.items[0].volumeInfo;
-            
-            if (info.description) document.getElementById('form-resumen').value = info.description;
-            if (info.categories && info.categories.length > 0) {
-              const cats = info.categories[0].split('/');
-              document.getElementById('form-categoria').value = cats[0].trim();
-              if (cats[1]) document.getElementById('form-categoria2').value = cats[1].trim();
-            }
-
-            if (info.imageLinks) {
-              const imgUrl = info.imageLinks.thumbnail || info.imageLinks.smallThumbnail;
-              const imgHD = imgUrl.replace('http:', 'https:').replace('&edge=curl', '');
-              document.getElementById('form-imagen').value = imgHD;
-              actualizarLivePreview(imgHD);
-            }
-
-            lanzarToast("✨ Datos auto-completados exitosamente");
-          } else {
-            lanzarToast("No se halló información automática.");
-          }
-        })
-        .catch(() => lanzarToast("Error de conexión al buscar datos."));
-    }
-
-    function configurarBuscadorInteligente() {
-      const inputBuscar = document.getElementById('search-input');
-      const listaSugerencias = document.getElementById('autocomplete-list');
-
-      inputBuscar.addEventListener('input', function() {
-        const texto = this.value.toLowerCase().trim();
-        listaSugerencias.innerHTML = "";
-        if (texto === "") { listaSugerencias.style.display = "none"; renderizarCatalogo(); return; }
-
-        const coincidencias = misLibros.filter(l => 
-          l.titulo.toLowerCase().includes(texto) || 
-          l.autor.toLowerCase().includes(texto)
-        );
-
-        if (coincidencias.length > 0) {
-          coincidencias.slice(0, 5).forEach(libro => {
-            const item = document.createElement('div');
-            item.className = "suggestion-item";
-            item.innerHTML = `<img src="${libro.imagen}"><div><strong>${libro.titulo}</strong></div>`;
-            item.addEventListener('click', () => {
-              inputBuscar.value = libro.titulo;
-              listaSugerencias.style.display = "none";
-              paginaActual = 1;
-              renderizarCatalogo(libro.titulo); 
-            });
-            listaSugerencias.appendChild(item);
-          });
-          listaSugerencias.style.display = "block";
-        }
-        paginaActual = 1;
-        renderizarCatalogo(texto);
-      });
-
-      document.addEventListener('click', (e) => {
-        if(e.target !== inputBuscar) listaSugerencias.style.display = "none";
-      });
-    }
-
-    function abrirVistaRapida(idFirebase) {
-      const libro = misLibros.find(l => l.idFirebase === idFirebase);
-      if(!libro) return;
-      document.getElementById('qv-img').src = libro.imagen;
-      document.getElementById('qv-title').innerText = libro.titulo;
-      document.getElementById('qv-author').innerText = `de ${libro.autor}`;
-      
-      const catGroup = document.getElementById('qv-cat-group');
-      catGroup.innerHTML = `<span class="book-category">${libro.categoria}</span>`;
-      if (libro.categoria2) catGroup.innerHTML += `<span class="book-category">${libro.categoria2}</span>`;
-
-      document.getElementById('qv-resume').innerText = libro.resumen || "Sin descripción disponible.";
-      document.getElementById('qv-price').innerText = `$${libro.precio}`;
-      
-      const numeroWa = configuracionSitio.whatsapp ? configuracionSitio.whatsapp.replace(/\D/g, "") : "521234567890";
-      const textoMsj = encodeURIComponent(`Hola, me interesa apartar el libro "${libro.titulo}" del autor ${libro.autor} que vi en la web de Librería Milenium.`);
-      document.getElementById('qv-btn-wa').href = `https://wa.me/${numeroWa}?text=${textoMsj}`;
-      
-      document.getElementById('quickview-modal').style.display = "block";
-    }
-
-    function cerrarVistaRapida(e, forzar = false) {
-      if(e.target === document.getElementById('quickview-modal') || forzar) {
-        document.getElementById('quickview-modal').style.display = "none";
-      }
-    }
-
-    function renderizarCatalogo(textoFiltro = "") {
-      const listaContenedor = document.getElementById('book-list');
-      const carruselContenedor = document.getElementById('new-books-carousel');
-      const paginacionBox = document.getElementById('pagination-box');
-      listaContenedor.innerHTML = ""; carruselContenedor.innerHTML = "";
-
-      misLibros.slice(-6).reverse().forEach(libro => {
-        carruselContenedor.innerHTML += `
-          <div class="carousel-item" onclick="abrirVistaRapida('${libro.idFirebase}')">
-            <div class="carousel-item-img-box"><img src="${libro.imagen}"></div>
-            <h4>${libro.titulo}</h4>
-          </div>`;
-      });
-
-      let librosFiltrados = misLibros.filter(libro => {
-        const cumpleCategoria = (
-          categoriaSeleccionada === "Todas" || 
-          libro.categoria === categoriaSeleccionada || 
-          libro.categoria2 === categoriaSeleccionada
-        );
-        
-        const texto = textoFiltro ? textoFiltro.toLowerCase() : document.getElementById('search-input').value.toLowerCase().trim();
-        const cumpleTexto = (
-          texto === "" || 
-          libro.titulo.toLowerCase().includes(texto) || 
-          libro.autor.toLowerCase().includes(texto) || 
-          (libro.categoria && libro.categoria.toLowerCase().includes(texto)) ||
-          (libro.categoria2 && libro.categoria2.toLowerCase().includes(texto))
-        );
-        
-        const precioMaximo = parseFloat(document.getElementById('control-precio-rango').value);
-        const cumplePrecio = libro.precio <= precioMaximo;
-
-        return cumpleCategoria && cumpleTexto && cumplePrecio;
-      });
-
-      const orden = document.getElementById('control-ordenar').value;
-      if (orden === "price-asc") librosFiltrados.sort((a,b) => a.precio - b.precio);
-      if (orden === "price-desc") librosFiltrados.sort((a,b) => b.precio - a.precio);
-      if (orden === "alpha") librosFiltrados.sort((a,b) => a.titulo.localeCompare(b.titulo));
-
-      if(librosFiltrados.length === 0) {
-        listaContenedor.innerHTML = `<div class="no-results"><i class="fa-solid fa-face-frown" style="font-size:2rem; margin-bottom:10px; display:block"></i> No encontramos títulos con esas especificaciones.</div>`;
-        paginacionBox.innerHTML = "";
-        return;
-      }
-
-      let indiceMaximo = paginaActual * limiteLibrosPorPagina;
-      let fragmentoMostrar = librosFiltrados.slice(0, indiceMaximo);
-
-      fragmentoMostrar.forEach(libro => {
-        let textoDisp = "Disponible"; let claseDisp = "available";
-        if (libro.available === false || libro.available === "false") { textoDisp = "Agotado"; claseDisp = "not-available"; } 
-        else if (libro.available === "discontinued") { textoDisp = "Descontinuado"; claseDisp = "discontinued"; }
-
-        const numeroWa = configuracionSitio.whatsapp ? configuracionSitio.whatsapp.replace(/\D/g, "") : "521234567890";
-        const textoMsj = encodeURIComponent(`Hola, me interesa apartar el libro "${libro.titulo}" que vi en la web de Librería Milenium.`);
-
-        let htmlCategoriasTag = `<span class="book-category">${libro.categoria}</span>`;
-        if (libro.categoria2) htmlCategoriasTag += `<span class="book-category">${libro.categoria2}</span>`;
-
-        listaContenedor.innerHTML += `
-          <div class="book" onclick="abrirVistaRapida('${libro.idFirebase}')">
-            <div class="book-image-container"><img src="${libro.imagen}" loading="lazy"></div>
-            <h4>${libro.titulo}</h4>
-            <p class="book-author">de ${libro.autor}</p>
-            <p class="book-resume">${libro.resumen || 'Sin descripción.'}</p>
-            <div class="book-details">
-              <div class="categories-tag-group">${htmlCategoriasTag}</div>
-              <span class="book-availability ${claseDisp}">${textoDisp}</span>
-            </div>
-            <div class="book-footer-row" onclick="event.stopPropagation()">
-              <div class="book-price">$${libro.precio}</div>
-              <a href="https://wa.me/${numeroWa}?text=${textoMsj}" target="_blank" class="btn-order-wa"><i class="fa-brands fa-whatsapp"></i> Apartar</a>
-            </div>
-          </div>`;
-      });
-
-      if (librosFiltrados.length > indiceMaximo) {
-        paginacionBox.innerHTML = `<button class="btn-load-more" onclick="cargarMasLibros()">Ver más títulos</button>`;
-      } else {
-        paginacionBox.innerHTML = "";
-      }
-    }
-
-    function cargarMasLibros() {
-      paginaActual++;
+    function actualizarTextoPrecio(val) {
+      document.getElementById('texto-precio-max').textContent = `$${val}`;
       renderizarCatalogo();
     }
 
-    function filtrarTablaAdmin(texto) {
-      renderizarTablaAdmin(texto.toLowerCase().trim());
-    }
+    // 4. CARRUSEL
+    function renderizarCarrusel() {
+      const carrusel = document.getElementById('new-books-carousel');
+      carrusel.innerHTML = '';
+      const recientes = librosGlobal.slice(-8).reverse();
 
-    function renderizarTablaAdmin(filtroTexto = "") {
-      const tbody = document.getElementById('management-table-body');
-      tbody.innerHTML = "";
-
-      let listaMostrar = misLibros.filter(l => 
-        l.titulo.toLowerCase().includes(filtroTexto) || 
-        l.autor.toLowerCase().includes(filtroTexto)
-      );
-
-      document.getElementById('count-tabla-admin').innerText = listaMostrar.length;
-
-      listaMostrar.forEach((libro) => {
-        const indexOriginal = misLibros.findIndex(m => m.idFirebase === libro.idFirebase);
-        
-        let estaDisponible = libro.available === true || libro.available === "true";
-        let badgeHtml = estaDisponible 
-          ? `<span class="tbl-badge disp">Disponible</span>` 
-          : `<span class="tbl-badge agot">Agotado</span>`;
-
-        tbody.innerHTML += `
-          <tr>
-            <td><img src="${libro.imagen}" class="tbl-thumb"></td>
-            <td><strong>${libro.titulo}</strong></td>
-            <td>${libro.autor}</td>
-            <td>$${libro.precio}</td>
-            <td>${badgeHtml}</td>
-            <td class="action-btns">
-              <button class="toggle-disp-btn" title="Cambiar Estado Rápido" onclick="conmutarEstadoRapido('${libro.idFirebase}', ${estaDisponible})"><i class="fa-solid fa-arrows-rotate"></i></button>
-              <button class="edit-btn" onclick="cargarLibroEnFormulario(${indexOriginal})"><i class="fa-solid fa-pen"></i></button>
-              <button class="delete-btn" onclick="eliminarLibro('${libro.idFirebase}', '${libro.titulo}')"><i class="fa-solid fa-trash"></i></button>
-            </td>
-          </tr>`;
+      recientes.forEach(libro => {
+        const item = document.createElement('div');
+        item.className = 'carousel-item';
+        item.onclick = () => abrirVistaRapida(libro);
+        item.innerHTML = `
+          <div class="carousel-item-img-box">
+            <img src="${libro.imagen}" alt="${libro.titulo}">
+          </div>
+          <h4>${libro.titulo}</h4>
+        `;
+        carrusel.appendChild(item);
       });
-    }
-
-    function conmutarEstadoRapido(idFirebase, estadoActual) {
-      if(!adminAutenticado) return;
-      db.ref('libros/' + idFirebase + '/available').set(!estadoActual).then(() => {
-        lanzarToast("Estado actualizado correctamente");
-      });
-    }
-
-    function abrirAdminPanel() { 
-      document.getElementById('admin-overlay').style.display = 'block'; 
-      document.getElementById('admin-panel').style.display = 'block'; 
-    }
-    
-    function cerrarAdminPanel() { 
-      document.getElementById('admin-overlay').style.display = 'none'; 
-      document.getElementById('admin-panel').style.display = 'none'; 
-      document.getElementById('book-form').reset(); 
-      document.getElementById('edit-idFirebase').value = ""; 
-      document.getElementById('form-live-img').src = "https://via.placeholder.com/140x200?text=Sin+Portada";
-      document.getElementById('panel-title').innerHTML = `<i class="fa-solid fa-plus-circle"></i> Agregar Nuevo Libro`;
-    }
-
-    function guardarLibro(event) {
-      event.preventDefault();
-      if(!adminAutenticado) return;
-      const idFirebase = document.getElementById('edit-idFirebase').value;
-      
-      const valorDisp = document.getElementById('form-disponible').value;
-      let valorGuardarDisp = valorDisp;
-      if (valorDisp === "true") valorGuardarDisp = true;
-      if (valorDisp === "false") valorGuardarDisp = false;
-
-      const nuevoLibro = {
-        titulo: document.getElementById('form-titulo').value,
-        autor: document.getElementById('form-autor').value,
-        imagen: document.getElementById('form-imagen').value,
-        resumen: document.getElementById('form-resumen').value,
-        precio: parseFloat(document.getElementById('form-precio').value),
-        categoria: document.getElementById('form-categoria').value,
-        categoria2: document.getElementById('form-categoria2').value || "",
-        available: valorGuardarDisp
-      };
-
-      if (idFirebase === "") {
-        db.ref('libros').push(nuevoLibro).then(() => {
-          cerrarAdminPanel();
-          lanzarToast("Nuevo libro agregado");
-        });
-      } else {
-        db.ref('libros/' + idFirebase).set(nuevoLibro).then(() => {
-          cerrarAdminPanel();
-          lanzarToast("Registro de libro modificado");
-        });
-      }
-    }
-
-    function cargarLibroEnFormulario(index) {
-      const libro = misLibros[index];
-      document.getElementById('edit-idFirebase').value = libro.idFirebase;
-      document.getElementById('form-titulo').value = libro.titulo;
-      document.getElementById('form-autor').value = libro.autor;
-      document.getElementById('form-imagen').value = libro.imagen;
-      document.getElementById('form-live-img').src = libro.imagen;
-      document.getElementById('form-resumen').value = libro.resumen;
-      document.getElementById('form-precio').value = libro.precio;
-      document.getElementById('form-categoria').value = libro.categoria;
-      document.getElementById('form-categoria2').value = libro.categoria2 || "";
-      
-      document.getElementById('panel-title').innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Editando: ${libro.titulo}`;
-
-      if (libro.available === true || libro.available === "true") {
-        document.getElementById('form-disponible').value = "true";
-      } else if (libro.available === false || libro.available === "false") {
-        document.getElementById('form-disponible').value = "false";
-      } else {
-        document.getElementById('form-disponible').value = libro.available; 
-      }
-      
-      document.getElementById('admin-panel').scrollTo({top: 0, behavior: 'smooth'});
-    }
-
-    function eliminarLibro(idFirebase, titulo) {
-      if(!adminAutenticado) return;
-      if(confirm(`¿Eliminar permanentemente "${titulo}"?`)) {
-        db.ref('libros/' + idFirebase).remove().then(() => {
-          lanzarToast(`"${titulo}" fue removido`);
-        });
-      }
-    }
-
-    function actualizarDesplazamientoCarrusel() {
-      const carousel = document.getElementById('new-books-carousel');
-      const items = document.querySelectorAll('.carousel-item');
-      if (items.length === 0) return;
-
-      const itemWidth = items[0].offsetWidth + parseInt(window.getComputedStyle(items[0]).marginLeft) + parseInt(window.getComputedStyle(items[0]).marginRight);
-      const contenedorWrapper = document.querySelector('.carousel-wrapper');
-      const itemsVisibles = Math.floor(contenedorWrapper.offsetWidth / itemWidth) || 1;
-      const maxIndex = items.length - itemsVisibles;
-
-      if (carouselIndex > maxIndex) { carouselIndex = 0; } 
-      else if (carouselIndex < 0) { carouselIndex = maxIndex >= 0 ? maxIndex : 0; }
-
-      carousel.style.transform = `translateX(${-carouselIndex * itemWidth}px)`;
     }
 
     function moveCarousel(direction) {
-      carouselIndex += direction;
-      actualizarDesplazamientoCarrusel();
+      const carousel = document.getElementById('new-books-carousel');
+      carruselPosicion += direction * 220;
+      const maxScroll = -(carousel.scrollWidth - carousel.parentElement.clientWidth);
+      if (carruselPosicion < maxScroll) carruselPosicion = 0;
+      if (carruselPosicion > 0) carruselPosicion = maxScroll;
+      carousel.style.transform = `translateX(${carruselPosicion}px)`;
     }
 
-    function iniciarAutoPlayCarrusel() {
-      pausarCarrusel(); 
-      autoPlayInterval = setInterval(() => {
-        carouselIndex++;
-        actualizarDesplazamientoCarrusel();
-      }, 3500); 
+    function iniciarCarruselAuto() { carruselInterval = setInterval(() => moveCarousel(-1), 4000); }
+    function pausarCarrusel() { clearInterval(carruselInterval); }
+    function reanudarCarrusel() { iniciarCarruselAuto(); }
+
+    // 5. RESEÑAS
+    function renderizarComentarios() {
+      const container = document.getElementById('comments-container');
+      container.innerHTML = '';
+
+      if (comentariosGlobal.length === 0) {
+        container.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color: var(--text-muted);">Aún no hay opiniones registradas. ¡Sé el primero en compartir la tuya!</p>`;
+        return;
+      }
+
+      comentariosGlobal.slice().reverse().forEach(c => {
+        const estrellasHtml = '<i class="fa-solid fa-star"></i>'.repeat(c.rating || 5);
+        const card = document.createElement('div');
+        card.className = 'testimonial-card';
+        card.innerHTML = `
+          <div class="stars">${estrellasHtml}</div>
+          <p>"${c.texto}"</p>
+          <div class="testimonial-author">- ${c.autor}</div>
+        `;
+        container.appendChild(card);
+      });
     }
 
-    function pausarCarrusel() { if (autoPlayInterval) clearInterval(autoPlayInterval); }
-    function reanudarCarrusel() { iniciarAutoPlayCarrusel(); }
+    function guardarComentario(e) {
+      e.preventDefault();
+      const autor = document.getElementById('comment-author').value.trim();
+      const texto = document.getElementById('comment-text').value.trim();
+      const rating = parseInt(document.getElementById('comment-rating').value);
 
-    window.addEventListener('resize', () => { actualizarDesplazamientoCarrusel(); });
+      if (!autor || !texto) return;
 
-    function iniciarLibrosFlotantes() {
+      commentsRef.push({
+        autor: autor,
+        texto: texto,
+        rating: rating,
+        fecha: new Date().toISOString()
+      }).then(() => {
+        mostrarToast("¡Gracias por tu reseña!");
+        document.getElementById('public-comment-form').reset();
+      }).catch(err => mostrarToast("Error al publicar: " + err.message));
+    }
+
+    // 6. VISTA RÁPIDA
+    function abrirVistaRapida(libro) {
+      document.getElementById('qv-img').src = libro.imagen;
+      document.getElementById('qv-title').textContent = libro.titulo;
+      document.getElementById('qv-author').textContent = `Por: ${libro.autor}`;
+      document.getElementById('qv-resume').textContent = libro.resumen || 'Sin resumen disponible.';
+      document.getElementById('qv-price').textContent = `$${parseFloat(libro.precio).toFixed(2)}`;
+      
+      const waBase = configGlobal.whatsapp || "https://wa.me/5217220000000";
+      const msgWa = encodeURIComponent(`Hola, me interesa apartar "${libro.titulo}" de ${libro.autor}.`);
+      document.getElementById('qv-btn-wa').href = `${waBase}?text=${msgWa}`;
+      
+      document.getElementById('quickview-modal').style.display = 'block';
+    }
+
+    function cerrarVistaRapida(e, forzar = false) {
+      if (forzar || e.target.id === 'quickview-modal') {
+        document.getElementById('quickview-modal').style.display = 'none';
+      }
+    }
+
+    // 7. ADMINISTRACIÓN Y CONTROL DE INVENTARIO
+    function solicitarAccesoAdmin() {
+      const pass = prompt("Ingrese la clave de administración:");
+      if (pass === "milenium2026") {
+        document.getElementById('admin-overlay').style.display = 'block';
+        document.getElementById('admin-panel').style.display = 'block';
+      } else if (pass !== null) {
+        mostrarToast("Contraseña incorrecta");
+      }
+    }
+
+    function cerrarAdminPanel() {
+      document.getElementById('admin-overlay').style.display = 'none';
+      document.getElementById('admin-panel').style.display = 'none';
+    }
+
+    function guardarEstilosYLogos(e) {
+      e.preventDefault();
+      const nuevosEstilos = {
+        logoLeft: document.getElementById('config-logo-left').value.trim(),
+        logoRight: document.getElementById('config-logo-right').value.trim(),
+        colorPrimary: document.getElementById('config-color-primario').value,
+        colorSecondary: document.getElementById('config-color-secundario').value,
+        colorAccent: document.getElementById('config-color-acento').value
+      };
+
+      configRef.update(nuevosEstilos).then(() => {
+        mostrarToast("Estilos visuales actualizados");
+      }).catch(err => mostrarToast("Error al guardar: " + err.message));
+    }
+
+    function guardarConfiguracionSitio(e) {
+      e.preventDefault();
+      const configData = {
+        direccion: document.getElementById('config-direccion').value.trim(),
+        iframeMap: document.getElementById('config-iframe').value.trim(),
+        horarios: document.getElementById('config-horarios').value.trim(),
+        whatsapp: document.getElementById('config-whatsapp').value.trim(),
+        facebook: document.getElementById('config-facebook').value.trim(),
+        instagram: document.getElementById('config-instagram').value.trim()
+      };
+
+      configRef.update(configData).then(() => {
+        mostrarToast("Ajustes guardados correctamente");
+      }).catch(err => mostrarToast("Error al guardar: " + err.message));
+    }
+
+    function actualizarEstadisticasAdmin() {
+      const total = librosGlobal.length;
+      const disponibles = librosGlobal.filter(l => l.estado === 'Disponible').length;
+      const sumaValor = librosGlobal.reduce((acc, l) => acc + parseFloat(l.precio || 0), 0);
+
+      document.getElementById('stat-total-books').textContent = total;
+      document.getElementById('stat-available-books').textContent = disponibles;
+      document.getElementById('stat-total-value').textContent = `$${sumaValor.toFixed(2)}`;
+    }
+
+    function guardarLibro(e) {
+      e.preventDefault();
+      const id = document.getElementById('edit-book-id').value;
+      const libroData = {
+        titulo: document.getElementById('input-title').value.trim(),
+        autor: document.getElementById('input-author').value.trim(),
+        precio: parseFloat(document.getElementById('input-price').value),
+        categoria: document.getElementById('input-category').value.trim(),
+        estado: document.getElementById('input-status').value,
+        imagen: document.getElementById('input-image').value.trim(),
+        resumen: document.getElementById('input-resume').value.trim()
+      };
+
+      if (id) {
+        booksRef.child(id).update(libroData).then(() => {
+          mostrarToast("Libro actualizado");
+          resetFormulario();
+        });
+      } else {
+        booksRef.push(libroData).then(() => {
+          mostrarToast("Libro registrado en inventario");
+          resetFormulario();
+        });
+      }
+    }
+
+    function renderizarTablaAdmin(filtro = '') {
+      const tbody = document.getElementById('admin-table-body');
+      tbody.innerHTML = '';
+      
+      const filtrados = librosGlobal.filter(l => 
+        l.titulo.toLowerCase().includes(filtro.toLowerCase()) || 
+        l.autor.toLowerCase().includes(filtro.toLowerCase()) ||
+        (l.categoria && l.categoria.toLowerCase().includes(filtro.toLowerCase()))
+      );
+
+      filtrados.forEach(libro => {
+        tbody.innerHTML += `
+          <tr>
+            <td><img src="${libro.imagen}" class="tbl-thumb"></td>
+            <td><strong>${libro.titulo}</strong><br><small>${libro.autor}</small></td>
+            <td><span class="book-category">${libro.categoria || 'General'}</span></td>
+            <td>$${parseFloat(libro.precio).toFixed(2)}</td>
+            <td><span style="color:${libro.estado==='Disponible'?'#10b981':'#ef4444'}; font-weight:600;">${libro.estado}</span></td>
+            <td class="action-btns">
+              <button class="edit-btn" onclick="cargarEdicion('${libro.id}')"><i class="fa-solid fa-pen"></i> Editar</button>
+              <button class="delete-btn" onclick="eliminarLibro('${libro.id}')"><i class="fa-solid fa-trash"></i> Borrar</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function filtrarTablaAdmin() {
+      const val = document.getElementById('admin-search-tbl').value;
+      renderizarTablaAdmin(val);
+    }
+
+    function cargarEdicion(id) {
+      const libro = librosGlobal.find(l => l.id === id);
+      if (!libro) return;
+      document.getElementById('edit-book-id').value = id;
+      document.getElementById('input-title').value = libro.titulo;
+      document.getElementById('input-author').value = libro.autor;
+      document.getElementById('input-price').value = libro.precio;
+      document.getElementById('input-category').value = libro.categoria;
+      document.getElementById('input-status').value = libro.estado;
+      document.getElementById('input-image').value = libro.imagen;
+      document.getElementById('input-resume').value = libro.resumen;
+      document.getElementById('admin-form-title').textContent = "Editar Libro Seleccionado";
+      
+      document.getElementById('admin-panel').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function eliminarLibro(id) {
+      if (confirm("¿Deseas eliminar este ejemplar del catálogo?")) {
+        booksRef.child(id).remove().then(() => mostrarToast("Libro eliminado"));
+      }
+    }
+
+    function resetFormulario() {
+      document.getElementById('book-form').reset();
+      document.getElementById('edit-book-id').value = '';
+      document.getElementById('admin-form-title').textContent = "Agregar Nuevo Libro";
+    }
+
+    // UTILERÍAS Y EFECTOS
+    function toggleTheme() {
+      const body = document.body;
+      const isDark = body.getAttribute('data-theme') === 'dark';
+      body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      document.getElementById('theme-icon').className = isDark ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+    }
+
+    function mostrarToast(msg) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${msg}`;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    function cargarFondoAnimado() {
       const canvas = document.getElementById('background-canvas');
       const ctx = canvas.getContext('2d');
-      function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-      window.addEventListener('resize', resize); resize();
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
 
-      const libros = [];
-      for (let i = 0; i < 10; i++) {
-        libros.push({ x: Math.random() * canvas.width, y: canvas.height + Math.random() * 200, w: 30, h: 20, speed: Math.random() * 0.4 + 0.2, angle: 0 });
-      }
+      const particles = Array.from({ length: 25 }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        size: Math.random() * 14 + 10,
+        speedY: -(Math.random() * 0.5 + 0.2),
+        opacity: Math.random() * 0.5 + 0.2
+      }));
 
-      function drawRealisticBook(ctx, w, h) {
-        ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--color-secundario') || '#4a6fa5'; 
-        ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(w, h); ctx.stroke();
-      }
-
-      function anim() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        libros.forEach(l => {
-          l.y -= l.speed;
-          ctx.save(); ctx.translate(l.x, l.y); drawRealisticBook(ctx, l.w, l.h); ctx.restore();
-          if (l.y < -50) { l.y = canvas.height + 50; l.x = Math.random() * canvas.width; }
+      function draw() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach(p => {
+          ctx.fillStyle = `rgba(30, 60, 114, ${p.opacity})`;
+          ctx.font = `${p.size}px FontAwesome`;
+          ctx.fillText('📖', p.x, p.y);
+          p.y += p.speedY;
+          if (p.y < -20) p.y = height + 20;
         });
-        requestAnimationFrame(anim);
+        requestAnimationFrame(draw);
       }
-      anim();
+      draw();
+      window.onresize = () => { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; };
     }
-
-    document.addEventListener('DOMContentLoaded', inicializarWeb);
   </script>
 </body>
 </html>
