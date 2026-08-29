@@ -8,21 +8,15 @@
   <!-- FAVICON -->
   <link rel="icon" type="image/png" href="https://i.postimg.cc/ZYGd9Hh8/l-OGO-TERMINADO.png">
   
-  <!-- PRECONEXIONES RÁPIDAS PARA REDUCIR LATENCIA -->
+  <!-- ENLACES A RECURSOS EXTERNOS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
-  <link rel="dns-prefetch" href="https://i.postimg.cc">
-  <link rel="dns-prefetch" href="https://books.google.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght=0,600;0,700;1,400&display=swap" rel="stylesheet">
 
-  <!-- FUENTES Y ESTILOS EXTERNOS ASÍNCRONOS (NO BLOQUEANTES) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght=0,600;0,700;1,400&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-
-  <!-- FIREBASE (CARGA CON DEFER EN SEGUNDO PLANO) -->
-  <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
   <style>
     /* ==========================================================================
@@ -116,7 +110,7 @@
     .carousel { display: flex; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
     .carousel-item { min-width: 200px; max-width: 200px; margin: 0 1.2rem; text-align: center; flex-shrink: 0; cursor: pointer; }
     
-    /* PORTADA EN CARRUSEL */
+    /* PORTADA EN CARRUSEL (SIN RECORTE NI AUTORELLENO) */
     .carousel-item-img-box {
       width: 100%; height: 260px; display: flex; align-items: center; justify-content: center;
       background: transparent; border-radius: 12px; overflow: hidden; padding: 6px;
@@ -210,7 +204,7 @@
     [data-theme="dark"] .skeleton-pulse { background: linear-gradient(-45deg, #1e293b 35%, #334155 50%, #1e293b 65%); background-size: 400% 400%; }
     @keyframes pulseAnimation { 0% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-    /* TARJETA DE LIBRO */
+    /* TARJETA DE LIBRO (LIMPIEZA DE AUTORELLENO Y SIN RECORTE DE PORTADAS) */
     .book { 
       background: var(--card-bg); backdrop-filter: blur(5px); border-radius: 16px; padding: 1.5rem; 
       text-align: center; width: 100%; border: 2px solid var(--border-book-card); display: flex; 
@@ -339,7 +333,7 @@
     button.btn-primary { background: var(--color-primario); color: white; border: none; padding: 0.85rem 1.5rem; border-radius: 10px; font-weight: 600; font-size: 0.95rem; cursor: pointer; flex: 2; }
     button.btn-secondary { background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 0.85rem 1.5rem; border-radius: 10px; font-weight: 600; cursor: pointer; flex: 1; }
 
-    /* TABLA DE GESTIÓN CON BUSCADOR INTERNO */
+    /* TABLA ULTRA-COMPACTA DE GESTIÓN CON BUSCADOR INTERNO */
     .admin-table-controls { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 0.8rem; }
     .admin-table-search { position: relative; flex-grow: 1; max-width: 350px; }
     .admin-table-search input { width: 100%; padding: 0.5rem 1rem 0.5rem 2.2rem; border-radius: 20px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-main); font-size: 0.85rem; }
@@ -444,7 +438,7 @@
       </div>
     </div>
 
-    <!-- BANNER PEDIDOS ESPECIALES WHATSAPP -->
+    <!-- BANNER PEDIDOS ESPECIALES SI NO ENCUENTRA UN LIBRO -->
     <div class="special-order-banner">
       <div class="special-order-info">
         <h4>¿No encuentras el libro que buscas?</h4>
@@ -497,7 +491,7 @@
     </div>
   </div>
 
-  <!-- FOOTER -->
+  <!-- FOOTER EDITABLE -->
   <footer>
     <div class="footer-content">
       <div class="footer-brand">
@@ -517,9 +511,9 @@
 
       <div class="footer-map-container">
         <h4><i class="fa-solid fa-location-dot"></i> Ubicación</h4>
-        <p id="footer-direccion-txt" style="font-size:0.85rem;">Plaza San José, Local 20, Santiago Tianguistenco.</p>
+        <p id="footer-direccion-txt" style="font-size:0.85rem;">Plaza Juárez #1, Centro, Santiago Tianguistenco.</p>
         <div id="footer-mapa-box">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3766.188735237841!2d-99.47048032483375!3d19.17600868204918!2m3!1f0!1f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cdf32d200fb16f%3A0x6a0f443aef6cb3d!2sSantiago%20Tianguistenco%20de%20Galeana%20Centro%2C%20Méx.!5e0!3m2!1ses!2smx!4v1700000000000!5m2!1ses!2smx" allowfullscreen="" loading="lazy"></iframe>
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3766.188735237841!2d-99.47048032483375!3d19.17600868204918!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cdf32d200fb16f%3A0x6a0f443aef6cb3d!2sSantiago%20Tianguistenco%20de%20Galeana%20Centro%2C%20Méx.!5e0!3m2!1ses!2smx!4v1700000000000!5m2!1ses!2smx" allowfullscreen="" loading="lazy"></iframe>
         </div>
       </div>
 
@@ -577,9 +571,9 @@
             </div>
           </div>
 
-          <!-- BOTÓN AUTOCOMPLETADO AUTOMÁTICO VÍA GOOGLE BOOKS API -->
-          <button type="button" class="btn-ai-autofill" onclick="autocompletarLibroAPI()">
-            <i class="fa-solid fa-wand-magic-sparkles"></i> Buscar y Auto-completar datos
+          <!-- BOTÓN AUTOCOMPLETADO AUTOMÁTICO VÍA IA / GOOGLE BOOKS API -->
+          <button type="button" class="btn-ai-autofill" onclick="autocompletarLibroIA()">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Buscar y Auto-completar datos con IA
           </button>
 
           <div class="form-img-preview-container">
@@ -648,7 +642,7 @@
       </div>
     </div>
 
-    <!-- PESTAÑA PERSONALIZACIÓN Y UBICACIÓN -->
+    <!-- PESTAÑA PERSONALIZACIÓN Y UBICACIÓN DE LA TIENDA -->
     <div id="tab-diseno" class="tab-content">
       <div class="admin-card">
         <div class="admin-card-title">
@@ -682,7 +676,7 @@
           </div>
 
           <label>Dirección Completa (Pie de Página)</label>
-          <input type="text" id="input-local-direccion" placeholder="Ej: Plaza San José, Local 20, Santiago Tianguistenco">
+          <input type="text" id="input-local-direccion" placeholder="Ej: Plaza Juárez #1, Centro, Santiago Tianguistenco">
 
           <label>Enlace Iframe de Google Maps (Iframe Src)</label>
           <input type="text" id="input-local-mapa" placeholder="Coloca aquí la URL del src del iframe de Google Maps">
@@ -979,8 +973,8 @@
       if(menu.classList.contains('show')) toggleDropdownCategorias();
     }
 
-    /* AUTOCOMPLETADO AUTOMÁTICO VÍA GOOGLE BOOKS API */
-    function autocompletarLibroAPI() {
+    /* AUTOCOMPLETADO AUTOMÁTICO VÍA IA / GOOGLE BOOKS API */
+    function autocompletarLibroIA() {
       const titulo = document.getElementById('form-titulo').value.trim();
       const autor = document.getElementById('form-autor').value.trim();
 
@@ -1369,4 +1363,4 @@
     document.addEventListener('DOMContentLoaded', inicializarWeb);
   </script>
 </body>
-</html>
+</html> 
