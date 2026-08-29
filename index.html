@@ -8,15 +8,21 @@
   <!-- FAVICON -->
   <link rel="icon" type="image/png" href="https://i.postimg.cc/ZYGd9Hh8/l-OGO-TERMINADO.png">
   
-  <!-- ENLACES A RECURSOS EXTERNOS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- PRECONEXIONES RÁPIDAS PARA REDUCIR LATENCIA -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght=0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://i.postimg.cc">
+  <link rel="dns-prefetch" href="https://books.google.com">
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+  <!-- FUENTES Y ESTILOS EXTERNOS ASÍNCRONOS (NO BLOQUEANTES) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght=0,600;0,700;1,400&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+
+  <!-- FIREBASE (CARGA CON DEFER EN SEGUNDO PLANO) -->
+  <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
   <style>
     /* ==========================================================================
@@ -513,7 +519,7 @@
         <h4><i class="fa-solid fa-location-dot"></i> Ubicación</h4>
         <p id="footer-direccion-txt" style="font-size:0.85rem;">Plaza Juárez #1, Centro, Santiago Tianguistenco.</p>
         <div id="footer-mapa-box">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3766.188735237841!2d-99.47048032483375!3d19.17600868204918!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cdf32d200fb16f%3A0x6a0f443aef6cb3d!2sSantiago%20Tianguistenco%20de%20Galeana%20Centro%2C%20Méx.!5e0!3m2!1ses!2smx!4v1700000000000!5m2!1ses!2smx" allowfullscreen="" loading="lazy"></iframe>
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3766.188735237841!2d-99.47048032483375!3d19.17600868204918!2m3!1f0!1f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cdf32d200fb16f%3A0x6a0f443aef6cb3d!2sSantiago%20Tianguistenco%20de%20Galeana%20Centro%2C%20Méx.!5e0!3m2!1ses!2smx!4v1700000000000!5m2!1ses!2smx" allowfullscreen="" loading="lazy"></iframe>
         </div>
       </div>
 
@@ -1363,4 +1369,4 @@
     document.addEventListener('DOMContentLoaded', inicializarWeb);
   </script>
 </body>
-</html> 
+</html>
