@@ -110,7 +110,6 @@
     .carousel { display: flex; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
     .carousel-item { min-width: 200px; max-width: 200px; margin: 0 1.2rem; text-align: center; flex-shrink: 0; cursor: pointer; }
     
-    /* PORTADA EN CARRUSEL (SIN RECORTE NI AUTORELLENO) */
     .carousel-item-img-box {
       width: 100%; height: 260px; display: flex; align-items: center; justify-content: center;
       background: transparent; border-radius: 12px; overflow: hidden; padding: 6px;
@@ -204,7 +203,7 @@
     [data-theme="dark"] .skeleton-pulse { background: linear-gradient(-45deg, #1e293b 35%, #334155 50%, #1e293b 65%); background-size: 400% 400%; }
     @keyframes pulseAnimation { 0% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-    /* TARJETA DE LIBRO (LIMPIEZA DE AUTORELLENO Y SIN RECORTE DE PORTADAS) */
+    /* TARJETA DE LIBRO */
     .book { 
       background: var(--card-bg); backdrop-filter: blur(5px); border-radius: 16px; padding: 1.5rem; 
       text-align: center; width: 100%; border: 2px solid var(--border-book-card); display: flex; 
@@ -235,7 +234,6 @@
     
     .available { color: #10b981; }
     .not-available { color: #ef4444; }
-    .discontinued { color: #f59e0b; } 
 
     .book-footer-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
     .book-price { font-size: 1.3rem; font-weight: 700; color: var(--color-primario); }
@@ -299,7 +297,7 @@
     .logout-panel-btn { background: #fee2e2; border: 1px solid #fca5a5; font-size: 0.85rem; color: #b91c1c; cursor: pointer; padding: 0.4rem 0.9rem; border-radius: 30px; font-weight: 600; display: flex; align-items: center; gap: 5px; }
     .close-panel-btn { background: var(--bg-admin-card); border: 1px solid var(--border-color); font-size: 1.2rem; color: var(--text-muted); cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 
-    .admin-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .admin-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
     .stat-box { background: var(--bg-admin-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 0.8rem; text-align: center; }
     .stat-number { font-size: 1.4rem; font-weight: 700; color: var(--color-primario); }
     .stat-label { font-size: 0.72rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
@@ -314,13 +312,6 @@
     .admin-form label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.3rem; text-transform: uppercase; }
     .admin-form input, .admin-form select, .admin-form textarea { width: 100%; padding: 0.65rem 0.9rem; margin-bottom: 1rem; border: 1px solid var(--border-color); border-radius: 10px; background: var(--input-bg); color: var(--text-main); font-size: 0.9rem; }
 
-    .btn-ai-autofill {
-      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; border: none;
-      padding: 0.65rem 1.1rem; border-radius: 10px; font-weight: 600; font-size: 0.85rem; cursor: pointer;
-      display: flex; align-items: center; gap: 8px; margin-bottom: 1rem; transition: opacity 0.2s;
-    }
-    .btn-ai-autofill:hover { opacity: 0.9; }
-
     .form-img-preview-container { display: flex; gap: 1.5rem; align-items: flex-start; }
     .form-inputs-side { flex: 2; }
     .live-preview-box { flex: 0.8; height: 210px; border: 2px dashed var(--border-color); border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: var(--input-bg); padding: 6px; }
@@ -333,7 +324,7 @@
     button.btn-primary { background: var(--color-primario); color: white; border: none; padding: 0.85rem 1.5rem; border-radius: 10px; font-weight: 600; font-size: 0.95rem; cursor: pointer; flex: 2; }
     button.btn-secondary { background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 0.85rem 1.5rem; border-radius: 10px; font-weight: 600; cursor: pointer; flex: 1; }
 
-    /* TABLA ULTRA-COMPACTA DE GESTIÓN CON BUSCADOR INTERNO */
+    /* TABLA DE GESTIÓN CON BUSCADOR INTERNO */
     .admin-table-controls { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 0.8rem; }
     .admin-table-search { position: relative; flex-grow: 1; max-width: 350px; }
     .admin-table-search input { width: 100%; padding: 0.5rem 1rem 0.5rem 2.2rem; border-radius: 20px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-main); font-size: 0.85rem; }
@@ -364,7 +355,7 @@
       .header-content { flex-direction: column; text-align: center; gap: 1rem; }
       .info-sections, .footer-content { grid-template-columns: 1fr; }
       .form-row, .form-img-preview-container, .modal-qv-body { flex-direction: column; }
-      .admin-stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .admin-stats-grid { grid-template-columns: repeat(3, 1fr); }
       .modal-qv-body { width: 95%; max-height: 90vh; overflow-y: auto; padding: 1.5rem; }
       .modal-qv-img { max-width: 100%; height: 200px; }
     }
@@ -438,7 +429,7 @@
       </div>
     </div>
 
-    <!-- BANNER PEDIDOS ESPECIALES SI NO ENCUENTRA UN LIBRO -->
+    <!-- BANNER PEDIDOS ESPECIALES WHATSAPP -->
     <div class="special-order-banner">
       <div class="special-order-info">
         <h4>¿No encuentras el libro que buscas?</h4>
@@ -543,7 +534,6 @@
       <div class="stat-box"><div class="stat-number" id="stat-total">0</div><div class="stat-label">Total Libros</div></div>
       <div class="stat-box"><div class="stat-number" id="stat-disp">0</div><div class="stat-label">Disponibles</div></div>
       <div class="stat-box"><div class="stat-number" id="stat-agot">0</div><div class="stat-label">Agotados</div></div>
-      <div class="stat-box"><div class="stat-number" id="stat-desc">0</div><div class="stat-label">Descontinuados</div></div>
     </div>
 
     <div class="admin-tabs">
@@ -570,11 +560,6 @@
               <input type="text" id="form-autor" required>
             </div>
           </div>
-
-          <!-- BOTÓN AUTOCOMPLETADO AUTOMÁTICO VÍA IA / GOOGLE BOOKS API -->
-          <button type="button" class="btn-ai-autofill" onclick="autocompletarLibroIA()">
-            <i class="fa-solid fa-wand-magic-sparkles"></i> Buscar y Auto-completar datos con IA
-          </button>
 
           <div class="form-img-preview-container">
             <div class="form-inputs-side">
@@ -610,7 +595,6 @@
               <select id="form-disponible">
                 <option value="true">Disponible</option>
                 <option value="false">Agotado</option>
-                <option value="discontinued">Descontinuado</option>
               </select>
             </div>
           </div>
@@ -845,18 +829,16 @@
 
     function calcularEstadisticasAdmin() {
       let total = misLibros.length;
-      let disponibles = 0; let agotados = 0; let descontinuados = 0;
+      let disponibles = 0; let agotados = 0;
 
       misLibros.forEach(l => {
-        if(l.available === "discontinued") descontinuados++;
-        else if(l.available === false || l.available === "false") agotados++;
+        if(l.available === false || l.available === "false") agotados++;
         else disponibles++;
       });
 
       document.getElementById('stat-total').innerText = total;
       document.getElementById('stat-disp').innerText = disponibles;
       document.getElementById('stat-agot').innerText = agotados;
-      document.getElementById('stat-desc').innerText = descontinuados;
     }
 
     function actualizarTextoPrecio(val) {
@@ -971,47 +953,6 @@
       
       const menu = document.getElementById('dropdown-categories-menu');
       if(menu.classList.contains('show')) toggleDropdownCategorias();
-    }
-
-    /* AUTOCOMPLETADO AUTOMÁTICO VÍA IA / GOOGLE BOOKS API */
-    function autocompletarLibroIA() {
-      const titulo = document.getElementById('form-titulo').value.trim();
-      const autor = document.getElementById('form-autor').value.trim();
-
-      if (!titulo) {
-        lanzarToast("Escribe al menos el título para buscar datos.");
-        return;
-      }
-
-      lanzarToast("🔍 Obteniendo información...");
-      const query = encodeURIComponent(`${titulo} ${autor}`);
-      
-      fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.items && data.items.length > 0) {
-            const info = data.items[0].volumeInfo;
-            
-            if (info.description) document.getElementById('form-resumen').value = info.description;
-            if (info.categories && info.categories.length > 0) {
-              const cats = info.categories[0].split('/');
-              document.getElementById('form-categoria').value = cats[0].trim();
-              if (cats[1]) document.getElementById('form-categoria2').value = cats[1].trim();
-            }
-
-            if (info.imageLinks) {
-              const imgUrl = info.imageLinks.thumbnail || info.imageLinks.smallThumbnail;
-              const imgHD = imgUrl.replace('http:', 'https:').replace('&edge=curl', '');
-              document.getElementById('form-imagen').value = imgHD;
-              actualizarLivePreview(imgHD);
-            }
-
-            lanzarToast("✨ Datos auto-completados exitosamente");
-          } else {
-            lanzarToast("No se halló información automática.");
-          }
-        })
-        .catch(() => lanzarToast("Error de conexión al buscar datos."));
     }
 
     function configurarBuscadorInteligente() {
@@ -1132,7 +1073,6 @@
       fragmentoMostrar.forEach(libro => {
         let textoDisp = "Disponible"; let claseDisp = "available";
         if (libro.available === false || libro.available === "false") { textoDisp = "Agotado"; claseDisp = "not-available"; } 
-        else if (libro.available === "discontinued") { textoDisp = "Descontinuado"; claseDisp = "discontinued"; }
 
         const numeroWa = configuracionSitio.whatsapp ? configuracionSitio.whatsapp.replace(/\D/g, "") : "521234567890";
         const textoMsj = encodeURIComponent(`Hola, me interesa apartar el libro "${libro.titulo}" que vi en la web de Librería Milenium.`);
@@ -1235,9 +1175,7 @@
       const idFirebase = document.getElementById('edit-idFirebase').value;
       
       const valorDisp = document.getElementById('form-disponible').value;
-      let valorGuardarDisp = valorDisp;
-      if (valorDisp === "true") valorGuardarDisp = true;
-      if (valorDisp === "false") valorGuardarDisp = false;
+      let valorGuardarDisp = valorDisp === "true";
 
       const nuevoLibro = {
         titulo: document.getElementById('form-titulo').value,
@@ -1279,10 +1217,8 @@
 
       if (libro.available === true || libro.available === "true") {
         document.getElementById('form-disponible').value = "true";
-      } else if (libro.available === false || libro.available === "false") {
-        document.getElementById('form-disponible').value = "false";
       } else {
-        document.getElementById('form-disponible').value = libro.available; 
+        document.getElementById('form-disponible').value = "false";
       }
       
       document.getElementById('admin-panel').scrollTo({top: 0, behavior: 'smooth'});
@@ -1363,4 +1299,4 @@
     document.addEventListener('DOMContentLoaded', inicializarWeb);
   </script>
 </body>
-</html> 
+</html>
