@@ -15,7 +15,7 @@
     }
     const db = firebase.database();
     const booksRef = db.ref('libros');
-    const configRef = db.ref('configuracion_sitio');
+    const configRef = db.ref('configuracion'); // <-- CORREGIDO: Apunta al mismo nodo unificado del panel
     const commentsRef = db.ref('comentarios');
 
     // ESTADOS DE NAVEGACIÓN Y PAGINACIÓN POR LOTES
