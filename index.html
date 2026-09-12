@@ -42,7 +42,7 @@
         <img id="main-logo-left" class="header-logo" src="https://i.postimg.cc/ZYGd9Hh8/l-OGO-TERMINADO.png" alt="Librería Milenium Logo">
       </div>
 
-      <!-- TÍTULO DE LA LIBRERÍA (Sin acceso de administración) -->
+      <!-- TÍTULO DE LA LIBRERÍA -->
       <div class="header-title">
         <h1>Librería Milenium</h1>
         <span class="header-subtitle" id="sub-header-ubicacion">Santiago Tianguistenco, Edo. de México</span>
@@ -76,33 +76,10 @@
       </div>
     </section>
 
-    <!-- BUSCADOR Y FILTROS -->
-    <section class="search-filter-section" id="search-section">
-      <div class="search-container">
-        <div class="search-box">
-          <input type="text" id="search-input" placeholder="Buscar por título, autor o categoría..." autocomplete="off" oninput="filtrarCatalogo()">
-          <span class="search-icon">🔍</span>
-        </div>
-        
-        <div class="advanced-controls">
-          <div class="filter-group">
-            <label><i class="fa-solid fa-sort"></i> Ordenar:</label>
-            <select id="control-ordenar" onchange="renderizarCatalogo()">
-              <option value="default">Por Defecto</option>
-              <option value="price-asc">Precio: Menor a Mayor</option>
-              <option value="price-desc">Precio: Mayor a Menor</option>
-              <option value="alpha">Alfabético (A-Z)</option>
-            </select>
-          </div>
-
-          <div class="price-slider-container">
-            <span>$0</span>
-            <input type="range" id="control-precio-rango" min="0" max="2000" value="2000" oninput="actualizarTextoPrecio(this.value)">
-            <span id="texto-precio-max">$2000</span>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- ========================================================
+         SECCIÓN SUPERIOR: CATEGORÍAS, NOVEDADES Y WHATSAPP 
+         (Movidos arriba para no estorbar al momento de buscar)
+         ======================================================== -->
 
     <!-- DROPDOWN CATEGORÍAS & BOTÓN NOVEDADES -->
     <div class="cat-novedades-bar">
@@ -131,6 +108,34 @@
         <i class="fa-brands fa-whatsapp"></i> Solicitar por WhatsApp
       </a>
     </div>
+
+    <!-- BUSCADOR Y FILTROS (Ahora ubicados abajo de las categorías y limpios) -->
+    <section class="search-filter-section" id="search-section">
+      <div class="search-container">
+        <div class="search-box">
+          <input type="text" id="search-input" placeholder="Buscar por título, autor o categoría..." autocomplete="off" oninput="filtrarCatalogo()">
+          <span class="search-icon">🔍</span>
+        </div>
+        
+        <div class="advanced-controls">
+          <div class="filter-group">
+            <label><i class="fa-solid fa-sort"></i> Ordenar:</label>
+            <select id="control-ordenar" onchange="renderizarCatalogo()">
+              <option value="default">Por Defecto</option>
+              <option value="price-asc">Precio: Menor a Mayor</option>
+              <option value="price-desc">Precio: Mayor a Menor</option>
+              <option value="alpha">Alfabético (A-Z)</option>
+            </select>
+          </div>
+
+          <div class="price-slider-container">
+            <span>$0</span>
+            <input type="range" id="control-precio-rango" min="0" max="2000" value="2000" oninput="actualizarTextoPrecio(this.value)">
+            <span id="texto-precio-max">$2000</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- REJILLA DE LIBROS -->
     <section class="container" id="book-list"></section>
