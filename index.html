@@ -1,274 +1,489 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Librería Milenium - Catálogo Oficial</title>
-  
-  <!-- FAVICON -->
-  <link rel="icon" type="image/png" href="https://i.postimg.cc/ZYGd9Hh8/l-OGO-TERMINADO.png">
-  
-  <!-- RECURSOS EXTERNOS: FONT AWESOME & GOOGLE FONTS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <title>Librería Milenium - Catálogo Oficial</title>
+    
+    <!-- FAVICON OFICIAL -->
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/ZYGd9Hh8/l-OGO-TERMINADO.png">
 
-  <!-- FIREBASE COMPAT SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <!-- TAILWIND CSS (Motor de diseño adaptable móvil/escritorio) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            800: '#1e3c72',
+                            900: '#1b365d',
+                            950: '#0f172a'
+                        },
+                        emerald: {
+                            600: '#059669',
+                            700: '#047857'
+                        },
+                        amber: {
+                            500: '#f59e0b',
+                            600: '#d97706'
+                        },
+                        cream: '#fbfbf9'
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
 
-  <!-- ENLACE AL ARCHIVO CSS EXTERNO -->
-  <link rel="stylesheet" href="style.css">
+    <!-- GOOGLE FONTS & FONT AWESOME -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- FIREBASE COMPAT SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <!-- HOJA DE ESTILOS EXTERNA -->
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="font-sans bg-cream dark:bg-slate-950 text-gray-900 dark:text-slate-100 antialiased selection:bg-amber-500 selection:text-white transition-colors duration-300">
 
-  <canvas id="background-canvas"></canvas>
-  <div id="toast-container"></div>
+    <!-- Canvas de fondo animado (Libros flotantes) -->
+    <canvas id="background-canvas"></canvas>
 
-  <!-- BARRA DE BENEFICIOS -->
-  <div class="top-benefits-bar">
-    <div class="top-benefits-container">
-      <div class="benefit-item"><i class="fa-solid fa-store"></i> Retiro directo en Sucursal Plaza San José, Local 20</div>
-      <div class="benefit-item"><i class="fa-brands fa-whatsapp"></i> Atención y apartados personalizados</div>
-      <div class="benefit-item" id="top-bar-horarios"><i class="fa-regular fa-clock"></i> Lunes a Sábado de 11:00 am - 19:30 pm</div>
-    </div>
-  </div>
-  
-  <header>
-    <div class="header-content">
-      <!-- LOGO IZQUIERDO REAL -->
-      <div class="header-logo-container">
-        <img id="main-logo-left" class="header-logo" src="https://i.postimg.cc/ZYGd9Hh8/l-OGO-TERMINADO.png" alt="Librería Milenium Logo">
-      </div>
+    <!-- Contenedor de Notificaciones Toast -->
+    <div id="toast-container" class="fixed top-16 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-      <!-- TÍTULO DE LA LIBRERÍA -->
-      <div class="header-title">
-        <h1>Librería Milenium</h1>
-        <span class="header-subtitle" id="sub-header-ubicacion">Santiago Tianguistenco, Edo. de México</span>
-      </div>
+    <!-- Contenedor Principal Responsivo (100% en celular, hasta 1200px centrado en PC) -->
+    <div class="w-full max-w-6xl mx-auto min-h-screen relative pb-24 z-10">
 
-      <!-- LOGO DERECHO REAL -->
-      <div class="header-logo-container">
-        <img id="main-logo-right" class="header-logo" src="https://i.postimg.cc/ZYGd9Hh8/l-OGO-TERMINADO.png" alt="Librería Milenium Logo">
-      </div>
-    </div>
-  </header>
-
-  <div class="main-content">
-    <!-- HERO BANNER -->
-    <section class="hero-banner">
-      <h2>Encuentra Tu Próxima Gran Lectura</h2>
-      <p>Explora nuestro catálogo en vivo, consulta disponibilidad y apártalo directamente para recogerlo en nuestra sucursal de Plaza San José.</p>
-      <div class="hero-actions">
-        <a href="#search-section" class="btn-hero-primary"><i class="fa-solid fa-magnifying-glass"></i> Explorar Catálogo</a>
-        <a href="https://wa.me/5217220000000" id="hero-btn-wa" target="_blank" class="btn-hero-secondary"><i class="fa-brands fa-whatsapp"></i> Contactar Librero</a>
-      </div>
-    </section>
-
-    <!-- CARRUSEL DE NOVEDADES -->
-    <section class="carousel-container">
-      <h3 class="section-title">Novedades en Tendencia</h3>
-      <button class="carousel-btn next" onclick="moveCarousel(-1)">&#10094;</button>
-      <button class="carousel-btn prev" onclick="moveCarousel(1)">&#10095;</button>
-      <div class="carousel-wrapper" onmouseenter="pausarCarrusel()" onmouseleave="reanudarCarrusel()">
-        <div class="carousel" id="new-books-carousel"></div>
-      </div>
-    </section>
-
-    <!-- ========================================================
-         SECCIÓN SUPERIOR: CATEGORÍAS, NOVEDADES Y WHATSAPP 
-         (Movidos arriba para no estorbar al momento de buscar)
-         ======================================================== -->
-
-    <!-- DROPDOWN CATEGORÍAS & BOTÓN NOVEDADES -->
-    <div class="cat-novedades-bar">
-      <div class="dropdown-categories-wrapper">
-        <button class="dropdown-cat-btn" onclick="toggleDropdownCategorias()">
-          <span><i class="fa-solid fa-layer-group"></i> Explorar Categorías <strong id="cat-selected-label">(Todas)</strong></span>
-          <i class="fa-solid fa-chevron-down" id="dropdown-cat-icon"></i>
-        </button>
-        <div class="dropdown-cat-content" id="dropdown-categories-menu">
-          <div class="categories-pills-grid" id="categories-filter-box"></div>
-        </div>
-      </div>
-
-      <button class="btn-novedades-pill" id="btn-filtro-novedades" onclick="toggleFiltroNovedades()">
-        <i class="fa-solid fa-fire"></i> Novedades
-      </button>
-    </div>
-
-    <!-- BANNER PEDIDOS ESPECIALES -->
-    <div class="special-order-banner">
-      <div class="special-order-info">
-        <h4>¿No encuentras el libro que buscas?</h4>
-        <p>Te lo conseguimos sobre pedido. Envíanos un mensaje con el título y autor.</p>
-      </div>
-      <a href="https://wa.me/5217220000000?text=Hola,%20busco%20un%20libro%20sobre%20pedido" id="btn-pedir-wa" target="_blank" class="btn-special-wa">
-        <i class="fa-brands fa-whatsapp"></i> Solicitar por WhatsApp
-      </a>
-    </div>
-
-    <!-- BUSCADOR Y FILTROS (Ahora ubicados abajo de las categorías y limpios) -->
-    <section class="search-filter-section" id="search-section">
-      <div class="search-container">
-        <div class="search-box">
-          <input type="text" id="search-input" placeholder="Buscar por título, autor o categoría..." autocomplete="off" oninput="filtrarCatalogo()">
-          <span class="search-icon">🔍</span>
-        </div>
-        
-        <div class="advanced-controls">
-          <div class="filter-group">
-            <label><i class="fa-solid fa-sort"></i> Ordenar:</label>
-            <select id="control-ordenar" onchange="renderizarCatalogo()">
-              <option value="default">Por Defecto</option>
-              <option value="price-asc">Precio: Menor a Mayor</option>
-              <option value="price-desc">Precio: Mayor a Menor</option>
-              <option value="alpha">Alfabético (A-Z)</option>
-            </select>
-          </div>
-
-          <div class="price-slider-container">
-            <span>$0</span>
-            <input type="range" id="control-precio-rango" min="0" max="2000" value="2000" oninput="actualizarTextoPrecio(this.value)">
-            <span id="texto-precio-max">$2000</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- REJILLA DE LIBROS -->
-    <section class="container" id="book-list"></section>
-
-    <!-- BOTÓN VER MÁS PARA PAGINACIÓN -->
-    <div class="load-more-container">
-      <button id="load-more-btn" class="btn-load-more hidden" onclick="loadMoreProducts()">Ver más</button>
-    </div>
-
-    <!-- BANNER SUCURSAL LOCAL Y MAPA REAL -->
-    <section class="local-store-banner">
-      <div class="local-store-content" style="width: 100%;">
-        <h3><i class="fa-solid fa-store"></i> Visítanos en Santiago Tianguistenco</h3>
-        <p id="store-address-text">Plaza San José, Local 20. Pasa a explorar nuestras repisas o a recoger tu pedido apartado online.</p>
-        <div class="map-container" id="store-map-box" style="display: block;">
-          <iframe id="store-iframe" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3766.837895420202!2d-99.47000002495682!3d19.170600048805623!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cdf8f32a76f283%3A0xb3535d97f3b89ef7!2sPlaza%20San%20Jos%C3%A9!5e0!3m2!1ses-419!2smx!4v1700000000000!5m2!1ses-419!2smx" allowfullscreen="" loading="lazy"></iframe>
-        </div>
-      </div>
-      <a href="https://maps.google.com/?q=Plaza+San+Jose+Santiago+Tianguistenco" id="btn-gmaps-link" target="_blank" class="btn-visit-store">
-        <i class="fa-solid fa-location-dot"></i> Ver en Google Maps
-      </a>
-    </section>
-
-    <!-- RESEÑAS Y COMENTARIOS DE CLIENTES -->
-    <section class="testimonials-section">
-      <h3 class="section-title">Opiniones y Recomendaciones</h3>
-      <p style="text-align: center; color: var(--text-muted); font-size: 0.95rem;">¿Nos visitaste o compraste un libro? Déjanos tu comentario.</p>
-      
-      <div class="testimonials-grid" id="comments-container"></div>
-
-      <!-- FORMULARIO DE COMENTARIOS -->
-      <div class="comments-form-card">
-        <h4 style="margin-bottom: 1rem; color: var(--color-primario);"><i class="fa-regular fa-comment-dots"></i> Dejar una Recomendación</h4>
-        <form id="public-comment-form" onsubmit="guardarComentario(event)" class="admin-form" style="margin: 0;">
-          <div class="form-row">
-            <div>
-              <label>Tu Nombre / Usuario</label>
-              <input type="text" id="comment-author" required placeholder="Ej. Carlos M.">
+        <!-- 1. Micro-barra Superior de Beneficios y Horarios -->
+        <div onclick="openStoreInfoModal()" class="bg-navy-950 text-amber-400 text-[11px] md:text-xs py-2 px-3 md:px-6 flex justify-between items-center cursor-pointer border-b border-navy-800">
+            <div class="flex items-center gap-2 truncate">
+                <i class="fa-solid fa-store text-amber-500"></i>
+                <span class="text-gray-100 font-medium truncate">Sucursal Plaza San José, Local 20</span>
+                <span class="hidden md:inline text-gray-400">|</span>
+                <span class="hidden md:inline-flex items-center gap-1 text-emerald-400"><i class="fa-brands fa-whatsapp"></i> Apartados personalizados en línea</span>
             </div>
-            <div>
-              <label>Valoración</label>
-              <select id="comment-rating">
-                <option value="5">⭐⭐⭐⭐⭐ (5/5 Excelente)</option>
-                <option value="4">⭐⭐⭐⭐ (4/5 Muy Bueno)</option>
-                <option value="3">⭐⭐⭐ (3/5 Bueno)</option>
-                <option value="2">⭐⭐ (2/5 Regular)</option>
-                <option value="1">⭐ (1/5 Malo)</option>
-              </select>
+            <div class="flex items-center gap-1.5 shrink-0 font-semibold text-amber-300" id="top-bar-horarios">
+                <i class="fa-regular fa-clock text-[10px] md:text-xs"></i>
+                <span class="underline decoration-amber-500/50">Lun-Sáb 11:00 - 19:00</span>
             </div>
-          </div>
-          <label>Tu Comentario u Opinión</label>
-          <textarea id="comment-text" rows="3" required placeholder="Cuéntanos tu experiencia con nuestro servicio o recomiendanos una lectura..."></textarea>
-          <button type="submit" class="btn-primary" style="flex: none; width: 100%;"><i class="fa-solid fa-paper-plane"></i> Publicar Opinión</button>
-        </form>
-      </div>
-    </section>
-
-    <section class="info-sections">
-      <div class="info-card">
-        <h3><i class="fa-solid fa-book-open"></i> Acerca de Nosotros</h3>
-        <p>Bienvenidos a <strong>Librería Milenium</strong>. Somos un espacio dedicado a conectar mentes curiosas con las mejores historias, clásicos literarios, sagas juveniles y novedades editoriales en Santiago Tianguistenco.</p>
-      </div>
-      <div class="info-card">
-        <h3><i class="fa-solid fa-handshake"></i> Cómo Trabajamos</h3>
-        <p>Hacer tuyo tu próximo libro favorito es fácil y directo:</p>
-        <ul style="margin-left: 1.2rem; margin-top: 0.5rem;">
-          <li>Explora nuestro inventario en línea en tiempo real.</li>
-          <li>Consulta la disponibilidad inmediata en la tienda.</li>
-          <li>Haz tu apartado vía WhatsApp o visítanos directamente en Plaza San José.</li>
-        </ul>
-      </div>
-    </section>
-  </div>
-
-  <!-- MODAL VISTA RÁPIDA -->
-  <div id="quickview-modal" onclick="cerrarVistaRapida(event)">
-    <div class="modal-qv-body">
-      <div class="modal-qv-img">
-        <img id="qv-img" src="" alt="">
-      </div>
-      <div class="modal-qv-info">
-        <button class="modal-qv-close" onclick="cerrarVistaRapida(event, true)">&times;</button>
-        <div id="qv-cat-group" class="categories-tag-group" style="justify-content:flex-start; margin-bottom:8px;"></div>
-        <h2 id="qv-title" class="modal-qv-title"></h2>
-        <p id="qv-author" class="book-author"></p>
-        <p id="qv-resume" class="modal-qv-resume"></p>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:auto;">
-          <span id="qv-price" class="book-price"></span>
-          <a id="qv-btn-wa" href="" target="_blank" class="btn-order-wa"><i class="fa-brands fa-whatsapp"></i> Apartar Ahora</a>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <button class="theme-toggle-btn" onclick="toggleTheme()"><i class="fa-solid fa-moon" id="theme-icon"></i></button>
+        <!-- 2. Encabezado Compacto Móvil / Expandido en Escritorio -->
+        <header class="bg-gradient-to-r from-navy-800 to-navy-900 text-white px-4 md:px-8 py-3 md:py-4 flex items-center justify-between shadow-md relative z-30">
+            <div class="flex items-center gap-3">
+                <!-- Logo Izquierdo Oficial -->
+                <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/10 border-2 border-amber-500 p-0.5 flex items-center justify-center shrink-0 shadow-inner overflow-hidden">
+                    <img id="main-logo-left" 
+                         src="https://i.postimg.cc/ZYGd9Hh8/l-OGO-TERMINADO.png" 
+                         alt="Librería Milenium Logo" 
+                         class="w-full h-full object-contain rounded-full"
+                         onerror="this.onerror=null; this.src='https://placehold.co/80x80/1e3c72/f59e0b?text=LM';">
+                </div>
+                <div>
+                    <h1 class="font-serif font-bold text-lg sm:text-xl md:text-2xl leading-tight tracking-wide text-white">
+                        Librería Milenium
+                    </h1>
+                    <p class="text-[10px] md:text-xs text-amber-300 font-medium uppercase tracking-wider flex items-center gap-1.5" id="sub-header-ubicacion">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Santiago Tianguistenco, Edo. de Méx.
+                    </p>
+                </div>
+            </div>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-content">
-      <div class="footer-brand">
-        <h2>Librería Milenium</h2>
-        <p>Tu rincón literario preferido en Santiago Tianguistenco.</p>
-        <div class="social-links">
-          <a href="#" id="footer-fb" class="social-icon" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
-          <a href="#" id="footer-ig" class="social-icon" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-          <a href="https://wa.me/5217220000000" id="footer-wa" class="social-icon" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+            <!-- Acciones rápidas de cabecera + Segundo logo visible solo en pantallas grandes -->
+            <div class="flex items-center gap-2">
+                <button onclick="toggleTheme()" title="Cambiar Tema Oscuro/Claro" class="bg-navy-950/50 hover:bg-navy-950 text-amber-400 border border-white/15 rounded-full w-9 h-9 md:w-10 md:h-10 flex items-center justify-center transition">
+                    <i class="fa-solid fa-moon text-sm md:text-base" id="theme-icon"></i>
+                </button>
+                <button onclick="scrollToSection('sucursal-section')" title="Ver Ubicación y Mapa" class="bg-navy-950/50 hover:bg-navy-950 text-white border border-white/15 rounded-full w-9 h-9 md:w-10 md:h-10 flex items-center justify-center transition">
+                    <i class="fa-solid fa-location-dot text-sm md:text-base text-amber-400"></i>
+                </button>
+                <div class="hidden lg:flex w-14 h-14 rounded-full bg-white/10 border border-white/20 p-1 items-center justify-center ml-2">
+                    <img id="main-logo-right" src="https://i.postimg.cc/ZYGd9Hh8/l-OGO-TERMINADO.png" class="w-full h-full object-contain rounded-full" alt="Librería Milenium Logo">
+                </div>
+            </div>
+        </header>
+
+        <!-- 3. Hero Banner Optimizado -->
+        <section class="hero-banner-bg relative bg-navy-900 text-white px-4 md:px-10 py-5 md:py-10 border-b-2 border-amber-500/80 overflow-hidden md:rounded-b-3xl shadow-md">
+            <div class="relative z-10 max-w-2xl md:mx-auto md:text-center">
+                <span class="inline-block bg-amber-500/20 border border-amber-400/40 text-amber-300 text-[10px] md:text-xs font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full mb-1.5">
+                    ✨ Catálogo Oficial en Tiempo Real
+                </span>
+                <h2 class="font-serif text-xl sm:text-2xl md:text-4xl font-bold leading-snug text-white">
+                    Encuentra Tu Próxima <span class="text-amber-400 italic">Gran Lectura</span>
+                </h2>
+                <p class="text-xs sm:text-sm md:text-base text-gray-200 mt-1.5 leading-relaxed">
+                    Explora nuestro inventario en vivo, consulta disponibilidad inmediata y apártalo por WhatsApp para recoger en Plaza San José.
+                </p>
+                <div class="mt-3.5 md:mt-5 flex flex-wrap md:justify-center gap-2.5">
+                    <a href="#search-section" class="bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold text-xs md:text-sm px-4 py-2.5 rounded-full shadow-sm flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-magnifying-glass"></i> Explorar Catálogo
+                    </a>
+                    <a href="https://wa.me/5217220000000" id="hero-btn-wa" target="_blank" class="bg-white/15 hover:bg-white/25 backdrop-blur-xs text-white border border-white/30 font-semibold text-xs md:text-sm px-4 py-2.5 rounded-full flex items-center gap-1.5 transition">
+                        <i class="fa-brands fa-whatsapp text-emerald-400 text-sm md:text-base"></i> Contactar Librero
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Carrusel de "Novedades en Tendencia" -->
+        <section class="pt-4 pb-2 px-3 md:px-6 bg-gradient-to-b from-amber-50/60 to-transparent dark:from-slate-800/40">
+            <div class="flex justify-between items-center mb-2.5 px-1">
+                <h3 class="font-serif font-bold text-sm md:text-lg text-navy-800 dark:text-amber-400 flex items-center gap-1.5">
+                    <i class="fa-solid fa-fire text-amber-500"></i> Novedades en Tendencia
+                </h3>
+                <div class="flex gap-1.5">
+                    <button onclick="scrollTrendingCarousel(-1)" aria-label="Anterior" class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-gray-300 flex items-center justify-center text-xs shadow-xs hover:bg-gray-50">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <button onclick="scrollTrendingCarousel(1)" aria-label="Siguiente" class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-gray-300 flex items-center justify-center text-xs shadow-xs hover:bg-gray-50">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="new-books-carousel" class="flex gap-3 overflow-x-auto no-scrollbar pb-2 scroll-smooth">
+                <!-- Se llena automáticamente con los últimos 8 libros desde Firebase -->
+            </div>
+        </section>
+
+        <!-- 5. Barra "Sticky" (Fija al bajar): Buscador + Filtros + Píldoras de Categorías -->
+        <div id="search-section" class="sticky top-0 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-sm border-y border-gray-200 dark:border-slate-800 pt-2.5 pb-2.5 px-3 md:px-6 transition-all">
+            
+            <div class="flex gap-2 items-center max-w-3xl mx-auto">
+                <div class="relative flex-1 flex items-center">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 text-amber-600 text-sm pointer-events-none"></i>
+                    <input type="text" 
+                           id="search-input" 
+                           oninput="filtrarCatalogo()"
+                           placeholder="Buscar por título, autor o categoría..." 
+                           autocomplete="off"
+                           class="w-full pl-9 pr-8 py-2 md:py-2.5 bg-gray-50 dark:bg-slate-800 border-2 border-amber-500 rounded-xl text-xs sm:text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-amber-500/30 transition">
+                    <button id="clear-search" onclick="limpiarBusqueda()" class="hidden absolute right-2.5 text-gray-400 hover:text-gray-600 w-6 h-6 flex items-center justify-center">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Botón para desplegar Filtro de Precio y Ordenamiento -->
+                <button onclick="toggleAdvancedFilters()" id="btn-toggle-filters" class="shrink-0 bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 text-navy-800 dark:text-amber-400 border border-gray-200 dark:border-slate-700 px-3.5 py-2 md:py-2.5 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition">
+                    <i class="fa-solid fa-sliders"></i>
+                    <span>Filtros</span>
+                </button>
+            </div>
+
+            <!-- Panel desplegable de Ordenar y Rango de Precio -->
+            <div id="advanced-filters-panel" class="hidden max-w-3xl mx-auto mt-2.5 pt-2.5 border-t border-gray-100 dark:border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+                <div class="flex items-center justify-between sm:justify-start gap-2">
+                    <label class="text-gray-600 dark:text-gray-400 font-medium flex items-center gap-1 shrink-0">
+                        <i class="fa-solid fa-sort text-amber-500"></i> Ordenar por:
+                    </label>
+                    <select id="control-ordenar" onchange="renderizarCatalogo()" class="w-full sm:w-auto bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 font-semibold text-navy-900 dark:text-white focus:outline-none">
+                        <option value="default">Por Defecto</option>
+                        <option value="price-asc">Precio: Menor a Mayor</option>
+                        <option value="price-desc">Precio: Mayor a Menor</option>
+                        <option value="alpha">Alfabético (A-Z)</option>
+                    </select>
+                </div>
+                <div class="flex items-center justify-between gap-3 bg-gray-50 dark:bg-slate-800/60 px-3 py-1.5 rounded-lg">
+                    <span class="text-gray-600 dark:text-gray-400 font-medium shrink-0">Precio máx:</span>
+                    <input type="range" id="control-precio-rango" min="0" max="2000" value="2000" oninput="actualizarTextoPrecio(this.value)" class="w-full accent-amber-500 cursor-pointer">
+                    <span id="texto-precio-max" class="font-bold text-navy-800 dark:text-amber-400 shrink-0 min-w-[46px] text-right">$2000</span>
+                </div>
+            </div>
+
+            <!-- Carrusel Horizontal de Categorías Dinámicas + Píldora de Novedades -->
+            <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar mt-2.5 pb-0.5 max-w-5xl mx-auto">
+                <button id="btn-filtro-novedades" onclick="toggleFiltroNovedades()" class="shrink-0 px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1 bg-gradient-to-r from-red-500 to-amber-500 text-white shadow-xs transition">
+                    <i class="fa-solid fa-fire"></i> Novedades
+                </button>
+                <div id="categories-filter-box" class="flex items-center gap-1.5">
+                    <!-- Categorías dinámicas desde Firebase -->
+                </div>
+            </div>
         </div>
-      </div>
-      
-      <div class="footer-links">
-        <h4>Navegación</h4>
-        <ul>
-          <li><a href="#search-section">Catálogo Completo</a></li>
-          <li><a href="#search-section">Novedades</a></li>
-          <li><a href="#btn-pedir-wa">Pedidos Especiales</a></li>
-        </ul>
-      </div>
 
-      <div class="footer-links">
-        <h4>Ubicación</h4>
-        <p style="font-size:0.88rem; color:#9ca3af;" id="footer-direccion-txt">Plaza San José, Local 20<br>Santiago Tianguistenco, Estado de México.</p>
-      </div>
+        <!-- Barra de estado del catálogo -->
+        <div class="px-4 md:px-6 pt-3 pb-1 flex justify-between items-center text-[11px] md:text-xs text-gray-500 dark:text-gray-400">
+            <span id="results-count">Cargando inventario en vivo...</span>
+            <span id="cat-selected-label" class="font-semibold text-navy-800 dark:text-amber-400">(Todas)</span>
+        </div>
 
-      <div class="qr-box">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://libreriamilenium.com" alt="QR Catálogo">
-      </div>
+        <!-- 6. Rejilla de Libros (2 Columnas en Celular, 3 en Tablet, 4 en Escritorio) -->
+        <main class="p-3 md:p-6">
+            <!-- Esqueleto de carga mientras conecta Firebase -->
+            <div id="loading-skeleton" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-3 h-72 animate-pulse flex flex-col justify-between border border-gray-100 dark:border-slate-700">
+                    <div class="bg-gray-200 dark:bg-slate-700 h-40 rounded-xl"></div>
+                    <div class="h-3 bg-gray-200 dark:bg-slate-700 rounded w-3/4 mt-2"></div>
+                    <div class="h-3 bg-gray-200 dark:bg-slate-700 rounded w-1/2"></div>
+                    <div class="h-8 bg-gray-200 dark:bg-slate-700 rounded-xl mt-2"></div>
+                </div>
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-3 h-72 animate-pulse flex flex-col justify-between border border-gray-100 dark:border-slate-700">
+                    <div class="bg-gray-200 dark:bg-slate-700 h-40 rounded-xl"></div>
+                    <div class="h-3 bg-gray-200 dark:bg-slate-700 rounded w-3/4 mt-2"></div>
+                    <div class="h-3 bg-gray-200 dark:bg-slate-700 rounded w-1/2"></div>
+                    <div class="h-8 bg-gray-200 dark:bg-slate-700 rounded-xl mt-2"></div>
+                </div>
+            </div>
+
+            <!-- Contenedor oficial de libros (#book-list) -->
+            <div id="book-list" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5"></div>
+
+            <!-- Botón Ver Más para Paginación por Lotes -->
+            <div class="mt-6 text-center max-w-md mx-auto">
+                <button id="load-more-btn" onclick="loadMoreProducts()" class="hidden w-full py-3 bg-navy-800 hover:bg-navy-900 active:scale-98 text-white font-bold text-xs md:text-sm rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-plus-circle text-amber-400"></i>
+                    <span>Ver más libros del catálogo</span>
+                </button>
+            </div>
+        </main>
+
+        <!-- 7. Banner Pedidos Especiales -->
+        <section class="mx-3 md:mx-6 my-4 bg-gradient-to-br from-emerald-600 to-emerald-700 text-white rounded-2xl p-4 md:p-6 shadow-md border border-emerald-400/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div>
+                <span class="bg-amber-400 text-gray-950 text-[9px] md:text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full">Encargos Especiales</span>
+                <h4 class="font-serif font-bold text-base md:text-xl mt-1">¿No encuentras el libro que buscas?</h4>
+                <p class="text-xs md:text-sm text-emerald-50 mt-0.5 leading-relaxed">Te lo conseguimos sobre pedido. Envíanos un mensaje con el título y autor.</p>
+            </div>
+            <a href="https://wa.me/5217220000000?text=Hola,%20busco%20un%20libro%20sobre%20pedido" id="btn-pedir-wa" target="_blank" class="w-full md:w-auto shrink-0 bg-white hover:bg-amber-400 text-emerald-800 hover:text-gray-950 font-bold text-xs md:text-sm py-2.5 px-5 rounded-xl shadow-sm flex items-center justify-center gap-2 transition">
+                <i class="fa-brands fa-whatsapp text-base"></i> Solicitar por WhatsApp
+            </a>
+        </section>
+
+        <!-- 8. Banner Sucursal Local y Mapa Real de Google Maps -->
+        <section id="sucursal-section" class="mx-3 md:mx-6 my-6 bg-navy-950 text-white rounded-2xl p-4 md:p-6 shadow-lg border border-navy-800">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3">
+                <div>
+                    <h3 class="font-serif font-bold text-base md:text-xl text-amber-400 flex items-center gap-2">
+                        <i class="fa-solid fa-store"></i> Visítanos en Santiago Tianguistenco
+                    </h3>
+                    <p id="store-address-text" class="text-xs md:text-sm text-gray-300 mt-1 leading-relaxed">
+                        Plaza San José, Local 20. Pasa a explorar nuestras repisas o a recoger tu pedido apartado online.
+                    </p>
+                </div>
+                <a href="https://maps.google.com/?q=Plaza+San+Jose+Santiago+Tianguistenco" id="btn-gmaps-link" target="_blank" class="shrink-0 bg-navy-800 hover:bg-navy-700 text-amber-400 border border-amber-500/40 font-semibold text-xs md:text-sm py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition">
+                    <i class="fa-solid fa-location-dot"></i> Abrir en Google Maps
+                </a>
+            </div>
+            <div class="w-full rounded-xl overflow-hidden border border-white/10" id="store-map-box">
+                <iframe id="store-iframe" 
+                        class="w-full h-48 md:h-64 border-0"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3766.837895420202!2d-99.47000002495682!3d19.170600048805623!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cdf8f32a76f283%3A0xb3535d97f3b89ef7!2sPlaza%20San%20Jos%C3%A9!5e0!3m2!1ses-419!2smx!4v1700000000000!5m2!1ses-419!2smx" 
+                        allowfullscreen="" 
+                        loading="lazy"></iframe>
+            </div>
+        </section>
+
+        <!-- 9. Reseñas y Comentarios de Clientes en Vivo con Firebase -->
+        <section class="mx-3 md:mx-6 my-6 bg-white dark:bg-slate-800 rounded-2xl p-4 md:p-6 shadow-sm border border-gray-200 dark:border-slate-700">
+            <h3 class="font-serif font-bold text-base md:text-xl text-navy-800 dark:text-amber-400 text-center">
+                Opiniones y Recomendaciones
+            </h3>
+            <p class="text-[11px] md:text-xs text-gray-500 dark:text-gray-400 text-center mt-0.5">
+                ¿Nos visitaste o compraste un libro? Déjanos tu comentario.
+            </p>
+
+            <!-- Lista de comentarios desde Firebase -->
+            <div id="comments-container" class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3 max-h-72 overflow-y-auto pr-1"></div>
+
+            <!-- Formulario para publicar opinión -->
+            <div class="mt-5 bg-gray-50 dark:bg-slate-900/70 rounded-xl p-3.5 md:p-5 border border-gray-200 dark:border-slate-700 max-w-2xl mx-auto">
+                <h4 class="text-xs md:text-sm font-bold text-navy-800 dark:text-amber-400 mb-2.5 flex items-center gap-1.5">
+                    <i class="fa-regular fa-comment-dots"></i> Dejar una Recomendación
+                </h4>
+                <form id="public-comment-form" onsubmit="guardarComentario(event)" class="space-y-2.5 text-xs">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <div>
+                            <label class="block text-[10px] font-bold uppercase text-gray-500 mb-0.5">Tu Nombre / Usuario</label>
+                            <input type="text" id="comment-author" required placeholder="Ej. Carlos M." class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:border-amber-500">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold uppercase text-gray-500 mb-0.5">Valoración</label>
+                            <select id="comment-rating" class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none">
+                                <option value="5">⭐⭐⭐⭐⭐ (5/5 Excelente)</option>
+                                <option value="4">⭐⭐⭐⭐ (4/5 Muy Bueno)</option>
+                                <option value="3">⭐⭐⭐ (3/5 Bueno)</option>
+                                <option value="2">⭐⭐ (2/5 Regular)</option>
+                                <option value="1">⭐ (1/5 Malo)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase text-gray-500 mb-0.5">Tu Comentario u Opinión</label>
+                        <textarea id="comment-text" rows="2" required placeholder="Cuéntanos tu experiencia o recomiéndanos una lectura..." class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:border-amber-500"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-navy-800 hover:bg-navy-900 text-white font-bold py-2.5 rounded-xl shadow-xs flex items-center justify-center gap-1.5 transition">
+                        <i class="fa-solid fa-paper-plane"></i> Publicar Opinión
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- 10. Acerca de Nosotros y Cómo Trabajamos -->
+        <section class="mx-3 md:mx-6 my-5 grid grid-cols-1 md:grid-cols-2 gap-3.5">
+            <div class="bg-white dark:bg-slate-800 p-4 md:p-5 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-xs">
+                <h3 class="font-serif font-bold text-sm md:text-base text-navy-800 dark:text-amber-400 flex items-center gap-2 mb-1.5">
+                    <i class="fa-solid fa-book-open text-amber-500"></i> Acerca de Nosotros
+                </h3>
+                <p class="text-xs md:text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                    Bienvenidos a <strong>Librería Milenium</strong>. Somos un espacio dedicado a conectar mentes curiosas con las mejores historias, clásicos literarios, sagas juveniles y novedades editoriales en Santiago Tianguistenco.
+                </p>
+            </div>
+            <div class="bg-white dark:bg-slate-800 p-4 md:p-5 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-xs">
+                <h3 class="font-serif font-bold text-sm md:text-base text-navy-800 dark:text-amber-400 flex items-center gap-2 mb-1.5">
+                    <i class="fa-solid fa-handshake text-amber-500"></i> Cómo Trabajamos
+                </h3>
+                <ul class="text-xs md:text-sm text-gray-600 dark:text-gray-300 space-y-1 list-disc list-inside">
+                    <li>Explora nuestro inventario en línea en tiempo real.</li>
+                    <li>Consulta la disponibilidad inmediata en la tienda.</li>
+                    <li>Haz tu apartado vía WhatsApp o visítanos directamente en Plaza San José.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 11. Footer Oficial Completo con QR y Redes -->
+        <footer class="mt-8 bg-gray-900 text-gray-300 px-4 md:px-8 pt-8 pb-10 text-center md:text-left rounded-t-3xl border-t-4 border-amber-500">
+            <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                <div class="flex flex-col items-center md:items-start">
+                    <img src="https://i.postimg.cc/ZYGd9Hh8/l-OGO-TERMINADO.png" 
+                         alt="Librería Milenium" 
+                         class="w-14 h-14 rounded-full border-2 border-amber-400 mb-2 object-contain bg-navy-900"
+                         onerror="this.style.display='none'">
+                    <h2 class="font-serif font-bold text-white text-base md:text-lg">Librería Milenium</h2>
+                    <p class="text-xs text-amber-400 mt-0.5">Tu rincón literario preferido en Santiago Tianguistenco.</p>
+                    <div class="flex gap-3 mt-3">
+                        <a href="https://www.facebook.com/profile.php?id=61573099460976&locale=es_LA" id="footer-fb" target="_blank" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-navy-800 text-white flex items-center justify-center transition border border-gray-700">
+                            <i class="fa-brands fa-facebook-f text-sm"></i>
+                        </a>
+                        <a href="#" id="footer-ig" target="_blank" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-navy-800 text-white flex items-center justify-center transition border border-gray-700">
+                            <i class="fa-brands fa-instagram text-sm"></i>
+                        </a>
+                        <a href="https://wa.me/5217220000000" id="footer-wa" target="_blank" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-emerald-600 text-white flex items-center justify-center transition border border-gray-700">
+                            <i class="fa-brands fa-whatsapp text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-gray-800/80 rounded-xl p-3.5 text-xs text-left space-y-2 border border-gray-700">
+                    <h4 class="font-serif font-bold text-amber-400 text-sm">Ubicación</h4>
+                    <p class="flex items-start gap-2">
+                        <i class="fa-solid fa-location-dot text-amber-400 mt-0.5 w-4 text-center"></i>
+                        <span id="footer-direccion-txt">Plaza San José, Local 20, Santiago Tianguistenco, Estado de México.</span>
+                    </p>
+                </div>
+
+                <div class="flex flex-col items-center">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://libreriamilenium.com" 
+                         alt="QR Catálogo" 
+                         class="w-24 h-24 bg-white p-1.5 rounded-xl shadow-md">
+                    <span class="text-[10px] text-gray-400 mt-1.5">Comparte nuestro catálogo con este QR</span>
+                </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-gray-800 text-[11px] text-gray-400 text-center">
+                <p>&copy; 2026 Librería Milenium. Todos los derechos reservados.</p>
+            </div>
+        </footer>
+
+        <!-- Botón Flotante de WhatsApp en la "Zona del Pulgar" -->
+        <div class="fixed bottom-4 right-4 z-40">
+            <a href="https://wa.me/5217220000000?text=Hola%20Librer%C3%ADa%20Milenium,%20busco%20informaci%C3%B3n%20sobre%20un%20libro" id="fab-wa-link" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white pl-3.5 pr-4 py-2.5 rounded-full shadow-lg shadow-emerald-950/40 border-2 border-white flex items-center gap-2 transition-all">
+                <div class="relative flex items-center justify-center">
+                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                    <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-amber-400 rounded-full border border-emerald-700"></span>
+                </div>
+                <div class="text-left leading-tight">
+                    <span class="block text-[9px] uppercase tracking-wider text-emerald-100 font-semibold">Librero en línea</span>
+                    <span class="block text-xs font-bold">¿Buscas un libro?</span>
+                </div>
+            </a>
+        </div>
+
     </div>
-    <div class="footer-bottom">
-      <p>&copy; 2026 Librería Milenium. Todos los derechos reservados.</p>
-    </div>
-  </footer>
 
-  <!-- ENLACE AL ARCHIVO JAVASCRIPT EXTERNO -->
-  <script src="script.js"></script>
+    <!-- ==========================================
+         MODAL INFERIOR (BOTTOM SHEET): VISTA RÁPIDA DE LIBRO
+         ========================================== -->
+    <div id="quickview-modal" onclick="cerrarVistaRapida(event)" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div onclick="event.stopPropagation()" class="w-full max-w-md bg-white dark:bg-slate-900 rounded-t-3xl sm:rounded-3xl shadow-2xl p-5 max-h-[88vh] overflow-y-auto relative border-t-4 border-amber-500 animate-sheet-up">
+            
+            <div class="w-10 h-1.5 bg-gray-300 dark:bg-slate-700 rounded-full mx-auto mb-3 sm:hidden"></div>
+            <button onclick="cerrarVistaRapida(event, true)" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-300 flex items-center justify-center hover:bg-gray-200 absolute right-4 top-4 text-lg font-bold">
+                &times;
+            </button>
+
+            <div class="flex gap-4 items-start">
+                <div class="w-28 h-40 rounded-xl bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shrink-0 p-1.5 flex items-center justify-center overflow-hidden shadow-md">
+                    <img id="qv-img" src="" alt="Portada" class="max-w-full max-h-full object-contain" onerror="this.src='https://placehold.co/150x220/1e3c72/ffffff?text=Libro'">
+                </div>
+
+                <div class="flex-1 pr-4">
+                    <div id="qv-cat-group" class="flex flex-wrap gap-1 mb-1.5"></div>
+                    <h2 id="qv-title" class="font-serif font-bold text-base sm:text-lg text-navy-900 dark:text-white leading-snug"></h2>
+                    <p id="qv-author" class="text-xs text-gray-500 dark:text-gray-400 font-medium mt-0.5"></p>
+                    <div class="mt-2.5">
+                        <span id="qv-price" class="text-2xl font-extrabold text-navy-800 dark:text-amber-400"></span>
+                        <span class="text-[10px] text-gray-400 ml-1">MXN</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 bg-gray-50 dark:bg-slate-800/70 p-3.5 rounded-2xl border border-gray-200/80 dark:border-slate-700">
+                <h4 class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Sinopsis / Descripción</h4>
+                <p id="qv-resume" class="text-xs sm:text-sm text-gray-700 dark:text-gray-200 leading-relaxed max-h-40 overflow-y-auto"></p>
+            </div>
+
+            <div class="mt-3 flex items-center gap-2 text-[11px] text-navy-900 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 border border-amber-200/70 dark:border-amber-800/50 px-3 py-2 rounded-xl">
+                <i class="fa-solid fa-store text-amber-500"></i>
+                <span>Retiro directo en <strong>Sucursal Plaza San José, Local 20</strong>.</span>
+            </div>
+
+            <a id="qv-btn-wa" href="#" target="_blank" class="mt-4 w-full bg-emerald-600 hover:bg-emerald-700 active:scale-98 text-white font-bold py-3.5 px-4 rounded-xl shadow-md flex items-center justify-center gap-2 text-sm transition">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Apartar Ahora por WhatsApp
+            </a>
+        </div>
+    </div>
+
+    <!-- Modal Rápido de Horarios y Sucursal -->
+    <div id="store-modal-backdrop" onclick="closeStoreInfoModal()" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+        <div onclick="event.stopPropagation()" class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-5 shadow-2xl border-t-4 border-amber-500">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="font-serif font-bold text-lg text-navy-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-store text-amber-500"></i> Sucursal y Horarios
+                </h3>
+                <button onclick="closeStoreInfoModal()" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-300 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-3 text-xs text-gray-700 dark:text-gray-300">
+                <div class="bg-amber-50 dark:bg-slate-800 border border-amber-200 dark:border-slate-700 rounded-xl p-3">
+                    <p class="font-bold text-navy-900 dark:text-amber-400 text-sm mb-0.5">📍 Plaza San José, Local 20</p>
+                    <p>Santiago Tianguistenco, Estado de México.</p>
+                </div>
+                <div class="bg-gray-50 dark:bg-slate-800 rounded-xl p-3 border border-gray-200 dark:border-slate-700">
+                    <p class="font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-1.5">
+                        <i class="fa-regular fa-clock text-emerald-500"></i> Horario de Atención:
+                    </p>
+                    <p id="modal-horarios-txt">Lunes a Viernes de 11:00 a 19:00 hrs | Sábado de 13:00 a 19:00 hrs</p>
+                </div>
+            </div>
+            <button onclick="closeStoreInfoModal(); scrollToSection('sucursal-section');" class="mt-4 w-full bg-navy-800 text-white font-semibold py-2.5 rounded-xl text-xs">
+                Ver Mapa en la Página
+            </button>
+        </div>
+    </div>
+
+    <!-- ENLACE AL ARCHIVO JAVASCRIPT EXTERNO -->
+    <script src="script.js"></script>
 </body>
 </html>
