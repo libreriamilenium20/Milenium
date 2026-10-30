@@ -107,6 +107,23 @@ transition: transform 0.35s ease, box-shadow 0.35s ease;
 transform: translateY(-4px);
 }
 
+/* =========================================================
+ESTILOS DE DESCUENTO (PRECIO TACHADO + % OFF EN VERDE)
+========================================================= */
+.price-old-strike {
+font-size: 0.72rem;
+color: #9ca3af;
+text-decoration: line-through;
+display: block;
+line-height: 1.1;
+}
+
+.price-discount-badge {
+color: #059669;
+font-weight: 700;
+font-size: 0.75rem;
+}
+
 /* Limitar texto en tarjetas para mantener cuadrícula simétrica */
 .line-clamp-2 {
 display: -webkit-box;
