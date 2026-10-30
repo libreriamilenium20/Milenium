@@ -43,7 +43,7 @@
     <!-- GOOGLE FONTS & FONT AWESOME -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- FIREBASE COMPAT SDK -->
@@ -383,7 +383,7 @@
                 </div>
 
                 <div class="flex flex-col items-center">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://libreriamilenium.com" 
+                    <img id="footer-qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://libreriamilenium.com" 
                          alt="QR Catálogo" 
                          class="w-24 h-24 bg-white p-1.5 rounded-xl shadow-md">
                     <span class="text-[10px] text-gray-400 mt-1.5">Comparte nuestro catálogo con este QR</span>
@@ -431,9 +431,8 @@
                     <div id="qv-cat-group" class="flex flex-wrap gap-1 mb-1.5"></div>
                     <h2 id="qv-title" class="font-serif font-bold text-base sm:text-lg text-navy-900 dark:text-white leading-snug"></h2>
                     <p id="qv-author" class="text-xs text-gray-500 dark:text-gray-400 font-medium mt-0.5"></p>
-                    <div class="mt-2.5">
-                        <span id="qv-price" class="text-2xl font-extrabold text-navy-800 dark:text-amber-400"></span>
-                        <span class="text-[10px] text-gray-400 ml-1">MXN</span>
+                    <div class="mt-2.5" id="qv-price">
+                        <!-- Precio normal o con descuento inyectado dinámicamente -->
                     </div>
                 </div>
             </div>
